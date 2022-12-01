@@ -6,9 +6,17 @@ with Days.Day_2; use Days.Day_2;
 package body Days is
 
     procedure Run_Day_1( Input_File: String ) is
-        function Get_Calories_From_File( Input_File: String ) return Nat_Vec.Vector is
+        function Get_Calories_From_File( Input_File: String ) return Calories_Arr_T is
             -- Gets a Vector containing each elf with the relevant calories
             -- Each Elf in the input file is seperated by a blank line
+            function Convert_Vec_To_Arr( Vec : Nat_Vec.Vector ) return Calories_Arr_T is
+                Arr : Calories_Arr_T( Natural'First .. Natural(Vec.Length) ) := ( others => Natural'First );
+            begin
+                for Idx in Vec.First_Index .. Vec.Last_Index loop
+                    Arr(Idx) := Vec(Idx);
+                end loop;
+                return Arr;
+            end Convert_Vec_To_Arr;
             File : File_Type;
             Vec : Nat_Vec.Vector;
             Curr_Elf : Natural := Natural'First;
@@ -32,15 +40,15 @@ package body Days is
         
             Close(File => File);
         
-            return Vec;
+            return Convert_Vec_To_Arr(Vec);
         end Get_Calories_From_File;
-        Vec: constant Nat_Vec.Vector := Get_Calories_From_File( Input_File );
+        Arr: constant Calories_Arr_T := Get_Calories_From_File( Input_File );
     begin
         Put_Line( "--- Day 1 ---" );
         Put_Line( "Part 1");
-        Put_Line( "Max Elf Calories: " & Get_Max_Elf_Calories( Vec )'Image );
+        Put_Line( "Max Elf Calories: " & Get_Max_Elf_Calories( Arr )'Image );
         Put_Line( "Part 2");
-        Put_Line( "Total Calories of top 3 Elves: " & Get_Total_Calories_Of_Top_X_Elves( Vec, 3 )'Image );
+        Put_Line( "Total Calories of top 3 Elves: " & Get_Total_Calories_Of_Top_X_Elves( Arr, 3 )'Image );
     end Run_Day_1;
     
     procedure Run_Day_2( Input_File: String ) is
