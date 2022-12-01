@@ -7,3 +7,5 @@ maintainers = ["Alex Powell <alexjohnpowell93@gmail.com>"]
 maintainers-logins = ["Neoxas"]
 
 executables = ["aoc_2022_ada"]
+[[depends-on]]
+gnatprove = "^11.2.3"
