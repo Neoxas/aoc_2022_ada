@@ -17,15 +17,14 @@ package body Days.Day_1 with SPARK_Mode => Off is
         return Max_Idx;
     end Get_Max_Idx;
 
-
     function Get_Max_Elf_Calories ( Calories_Vec: Nat_Vec.Vector ) return Natural is
-        -- Run Part 1 to find the elf who is carrying the most calories
+        -- Find the most calories a single elf is carrying
     begin
         return Calories_Vec(Get_Max_Idx(Calories_Vec));
     end Get_Max_Elf_Calories;
 
     function Get_Total_Calories_Of_Top_X_Elves ( Calories_Vec: Nat_Vec.Vector; Elves_To_Count: Natural ) return Natural is
-        -- Run Part 2 to find the sum of calories for the top X elves
+        -- Find total calories of Top elves
         Total_Calories: Natural := Natural'First;
         Cal_Copy : Nat_Vec.Vector := Calories_Vec;
         Idx: Natural;
