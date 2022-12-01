@@ -1,11 +1,14 @@
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Containers.Vectors;
 
 package body Days.Day_1 with SPARK_Mode => Off is
+    package Nat_Vec is new
+      Ada.Containers.Vectors( Index_Type => Natural, Element_Type => Natural );
 
-    procedure Run_Day_1_Part_1 ( Input_File: String ) is
+    function Get_Calories_From_File( Input_File: String ) return Nat_Vec.Vector is
         File : File_Type;
-        Max : Integer := 0;
-        Curr_Elf : Integer := 0;
+        Vec : Nat_Vec.Vector;
+        Curr_Elf : Natural := Natural'First;
     begin
         Open(File => File, Mode => In_File, Name => Input_File);
 
@@ -14,68 +17,64 @@ package body Days.Day_1 with SPARK_Mode => Off is
                 Line : constant String := Get_Line(File => File);
             begin
                 if Line /= "" then -- Entries are split by a blank line
-                    Curr_Elf := Curr_Elf + Integer'Value( Line );
+                    Curr_Elf := Curr_Elf + Natural'Value( Line );
                 else
-                    Max := Integer'Max( Max, Curr_Elf );
-                    Curr_Elf := 0;
+                    Vec.Append( Curr_Elf );
+                    Curr_Elf := Natural'First;
                 end if;
             end;
         end loop;
-        -- Final Max calculation (to account for EOF)
-        Max := Integer'Max( Max, Curr_Elf );
+        Vec.Append( Curr_Elf );
 
-        Close( File );
-        Put_Line (Item => "Max elf calories: " & Max'Image);
+        Close(File => File);
+
+        return Vec;
+    end Get_Calories_From_File;
+
+    function Get_Max_Idx_Of_Int_Vec( Vec: Nat_Vec.Vector ) return Natural is
+        Tmp : Natural := Natural'First;
+        Max_Idx : Natural := 0;
+    begin
+        for Idx in Vec.First_Index .. Vec.Last_Index loop
+            if Vec(Idx) > Tmp then
+                Max_Idx := Idx;
+                Tmp := Vec(Idx);
+            end if;
+        end loop;
+
+        return Max_Idx;
+    end Get_Max_Idx_Of_Int_Vec;
+
+
+    procedure Run_Day_1_Part_1 ( Calories_Vec: Nat_Vec.Vector ) is
+    begin
+        Put_Line (Item => "Max elf calories: " & Natural'Image(
+                  Calories_Vec(Get_Max_Idx_Of_Int_Vec(Calories_Vec)
+                   )));
     end Run_Day_1_Part_1;
 
-    procedure Run_Day_1_Part_2 ( Input_File: String ) is
-        type Max_Arr_T is array( 1 .. 3 ) of Integer;
-        -- Define shuffling procedure to keep track of max 3 values
-        procedure Shuffle_Max( Max_Calories: in out Max_Arr_T; Curr_Elf: in out Integer ) is
-        begin
-            if Curr_Elf >= Max_Calories(1) then
-                Max_Calories( 2 .. 3 ) := Max_Calories( 1 .. 2 );
-                Max_Calories( 1 ) := Curr_Elf;
-            elsif Curr_Elf >= Max_Calories(2) then
-                Max_Calories( 3 ) := Max_Calories( 2 );
-                Max_Calories( 2 ) := Curr_Elf;
-            elsif Curr_Elf >= Max_Calories(3) then
-                Max_Calories( 3 ) := Curr_Elf;
-            end if;
-            Curr_Elf := 0;
-        end Shuffle_Max;
-
-        File : File_Type;
-
-        Max_Calories : Max_Arr_T := ( others => 0 );
-        Curr_Elf : Integer := 0;
+    procedure Run_Day_1_Part_2 ( Calories_Vec: Nat_Vec.Vector; Elves_To_Count: Natural ) is
+        Total_Calories: Natural := Natural'First;
+        Cal_Copy : Nat_Vec.Vector := Calories_Vec;
+        Idx: Natural;
     begin
-        Open(File => File, Mode => In_File, Name => Input_File);
-
-        while (not End_Of_File(File) ) loop
-            declare
-                Line : constant String := Get_Line(File => File);
-            begin
-                if Line /= "" then
-                    Curr_Elf := Curr_Elf + Integer'Value( Line );
-                else
-                    Shuffle_Max( Max_Calories, Curr_Elf);
-                end if;
-            end;
+        for I in Natural'First .. Elves_To_Count - 1 loop
+            Idx := Get_Max_Idx_Of_Int_Vec( Cal_Copy );
+            Total_Calories := Total_Calories + Cal_Copy( Idx );
+            -- Remove entries from Calories
+            Cal_Copy.Delete( Idx );
         end loop;
-        Shuffle_Max( Max_Calories, Curr_Elf);
-
-        Close( File );
-        Put_Line (Item => "Max elf calories: " & Integer'Image(Max_Calories(1) + Max_Calories(2) + Max_Calories(3)));
+        Put_Line (Item => "Max elf calories: " & Total_Calories'Image);
     end Run_Day_1_Part_2;
 
     procedure Run_Day_1 ( Input_File: String ) is
+        Cal_Vec : constant Nat_Vec.Vector := Get_Calories_From_File( Input_File );
     begin
         Put_Line( "--- Day 1 ---" );
         Put_Line( "Part 1" );
-        Run_Day_1_Part_1( Input_File );
+        Run_Day_1_Part_1( Cal_Vec );
         Put_Line( "Part 2" );
-        Run_Day_1_Part_2( Input_File );
+        Run_Day_1_Part_2( Cal_Vec, 3 );
     end Run_Day_1;
 
 end Days.Day_1;
