@@ -1,9 +1,9 @@
-package body Days.Day_1 with SPARK_Mode => Off is
+package body Days.Day_1 with SPARK_Mode => On is
 
     function Get_Max_Idx( Arr: Calories_Arr_T ) return Natural is
         -- Get index of maximum value from vector
         Tmp : Natural := Natural'First;
-        Max_Idx : Natural := 0;
+        Max_Idx : Natural := Arr'First;
     begin
         for Idx in Arr'First .. Arr'Last loop
             if Arr(Idx) > Tmp then
