@@ -29,24 +29,25 @@ package body Days.Day_1 with SPARK_Mode => Off is
     end Run_Day_1_Part_1;
 
     procedure Run_Day_1_Part_2 ( Input_File: String ) is
+        type Max_Arr_T is array( 1 .. 3 ) of Integer;
         -- Define shuffling procedure to keep track of max 3 values
-        procedure Shuffle_Max( Max1, Max2, Max3 : in out Integer; Curr_Elf: in out Integer ) is
+        procedure Shuffle_Max( Max_Calories: in out Max_Arr_T; Curr_Elf: in out Integer ) is
         begin
-            if Curr_Elf >= Max1 then
-                Max3 := Max2;
-                Max2 := Max1;
-                Max1 := Curr_Elf;
-            elsif Curr_Elf >= Max2 then
-                Max3 := Max2;
-                Max2 := Curr_Elf;
-            elsif Curr_Elf >= Max3 then
-                Max3 := Curr_Elf;
+            if Curr_Elf >= Max_Calories(1) then
+                Max_Calories( 2 .. 3 ) := Max_Calories( 1 .. 2 );
+                Max_Calories( 1 ) := Curr_Elf;
+            elsif Curr_Elf >= Max_Calories(2) then
+                Max_Calories( 3 ) := Max_Calories( 2 );
+                Max_Calories( 2 ) := Curr_Elf;
+            elsif Curr_Elf >= Max_Calories(3) then
+                Max_Calories( 3 ) := Curr_Elf;
             end if;
             Curr_Elf := 0;
         end Shuffle_Max;
 
         File : File_Type;
-        Max1, Max2, Max3 : Integer := 0;
+
+        Max_Calories : Max_Arr_T := ( others => 0 );
         Curr_Elf : Integer := 0;
     begin
         Open(File => File, Mode => In_File, Name => Input_File);
@@ -58,14 +59,14 @@ package body Days.Day_1 with SPARK_Mode => Off is
                 if Line /= "" then
                     Curr_Elf := Curr_Elf + Integer'Value( Line );
                 else
-                    Shuffle_Max( Max1, Max2, Max3, Curr_Elf);
+                    Shuffle_Max( Max_Calories, Curr_Elf);
                 end if;
             end;
         end loop;
-        Shuffle_Max( Max1, Max2, Max3, Curr_Elf);
+        Shuffle_Max( Max_Calories, Curr_Elf);
 
         Close( File );
-        Put_Line (Item => "Max elf calories: " & Integer'Image(Max1 + Max2 + Max3));
+        Put_Line (Item => "Max elf calories: " & Integer'Image(Max_Calories(1) + Max_Calories(2) + Max_Calories(3)));
     end Run_Day_1_Part_2;
 
     procedure Run_Day_1 ( Input_File: String ) is
