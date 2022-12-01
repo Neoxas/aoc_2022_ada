@@ -1,0 +1,9 @@
+name = "aoc_2022_ada"
+description = "Shiny new project"
+version = "0.1.0-dev"
+
+authors = ["Alex Powell"]
+maintainers = ["Alex Powell <alexjohnpowell93@gmail.com>"]
+maintainers-logins = ["Neoxas"]
+
+executables = ["aoc_2022_ada"]
