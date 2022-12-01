@@ -1,5 +1,6 @@
 package Days.Day_1 with SPARK_Mode is
-    type Calories_Arr_T is array( Natural range<>) of Natural;
+    type Calories_Arr_T is array( Natural range<>) of Natural with
+      Predicate => ( Calories_Arr_T'First = Natural'First );
 
     function Get_Max_Elf_Calories ( Calories_Arr: Calories_Arr_T ) return Natural with
       Pre => (Calories_Arr'Last > 0 and Calories_Arr'Last > Calories_Arr'First);
