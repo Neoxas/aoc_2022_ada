@@ -1,7 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Days.Day_1; use Days.Day_1;
-with Days.Day_2; use Days.Day_2;
 
 package body Days is
 
@@ -53,7 +52,7 @@ package body Days is
     
     procedure Run_Day_2( Input_File: String ) is
     begin
-        Put_Line( "Hello Day 2" );
+        Put_Line( Input_File );
     end Run_Day_2;
 
 end Days;
