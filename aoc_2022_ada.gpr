@@ -9,7 +9,7 @@ project Aoc_2022_Ada is
    for Main use ("aoc_2022_ada.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-Og", "-ffunction-sections", "-fdata-sections", "-g", "-gnat2020", "-gnatVa", "-gnatwa.X", "-gnatyaABbcdefhiIlM79nOprStux4k");
+      for Default_Switches ("ada") use ("-Og", "-ffunction-sections", "-fdata-sections", "-g", "-gnat2020", "-gnatVa", "-gnatwa.X", "-gnatyM794");
    end Compiler;
 
    package Binder is
