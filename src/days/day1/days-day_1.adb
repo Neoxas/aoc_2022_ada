@@ -1,18 +1,14 @@
 package body Days.Day_1 with SPARK_Mode is
 
     function Get_Max_Idx( Arr: Calories_Arr_T ) return Positive is
-        -- Get index of maximum value from vector
-        Tmp : Positive := Positive'First;
         -- Force max IDX to stay in the range of the array.
         Max_Idx : Positive range Arr'Range := Arr'First;
     begin
         for Idx in Arr'First .. Arr'Last loop
-            if Arr(Idx) > Tmp then
+            if Arr(Idx) > Arr(Max_Idx) then
                 Max_Idx := Idx;
-                Tmp := Arr(Idx);
             end if;
             pragma Loop_Invariant(for all X_Idx in Arr'First .. Idx => Arr(Max_Idx) >= Arr(X_Idx));
-            pragma Loop_Invariant( Tmp = Arr(Max_Idx) );
         end loop;
 
         return Max_Idx;
