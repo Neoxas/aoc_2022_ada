@@ -22,7 +22,7 @@ package Days.Day_2 with SPARK_Mode Is
                and Round_String( Round_String'Last ) in 'X' | 'Y' | 'Z' ) ;
 
     function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Natural with
-      Pre => ( Rounds'Length > 0 );
+      Pre => ( Rounds'Length > 0 and End_Round in Rounds'Range);
 
 private
     function Get_Round_Score( Round: Round_T ) return Natural;

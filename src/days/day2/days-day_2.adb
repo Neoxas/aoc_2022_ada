@@ -21,9 +21,9 @@ package body Days.Day_2 with SPARK_Mode is
         function Get_Result_Pair( Required_Outcome: Outcome; Elf_RPS: RPS ) return RPS is
             type Res_Lookup_Arr_T is array( RPS'Range ) of RPS;
             -- If they play input, I need to play output to loose.
-            Losing_Paring : constant Res_Lookup_Arr_T := [ ROCK => SCISSORS, PAPER => ROCK, SCISSORS => PAPER ];
+            Losing_Paring : constant Res_Lookup_Arr_T := ( ROCK => SCISSORS, PAPER => ROCK, SCISSORS => PAPER );
             -- If they play input, I need to play output to win.
-            Winning_Paring : constant Res_Lookup_Arr_T := [ ROCK => PAPER, PAPER => SCISSORS, SCISSORS => ROCK ];
+            Winning_Paring : constant Res_Lookup_Arr_T := ( ROCK => PAPER, PAPER => SCISSORS, SCISSORS => ROCK );
 
         begin
             case Required_Outcome is
