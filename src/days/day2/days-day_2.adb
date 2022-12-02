@@ -3,7 +3,7 @@ package body Days.Day_2 with SPARK_Mode is
     subtype Outcome_Score_T is Score_Base_T  range 0 .. 6;
     
     function Convert_To_Elf( Hint : Character ) return RPS is 
-          ( if Hint = 'A' then ROCK elsif Hint = 'B' then PAPER else SCISSORS ) with
+      ( if Hint = 'A' then ROCK elsif Hint = 'B' then PAPER else SCISSORS ) with
       Pre => ( Hint in 'A'|'B'|'C');
     
     function Convert_To_Matched_Round( Round_String: Round_Str_T ) return Round_T is        
@@ -18,7 +18,7 @@ package body Days.Day_2 with SPARK_Mode is
     
     function Convert_To_Predicted_Round( Round_String: Round_Str_T ) return Round_T is
         function Get_Required_Result( Hint : Character ) return Outcome is 
-            ( if Hint = 'X' then LOSE elsif Hint = 'Y' then DRAW else WIN ) with 
+          ( if Hint = 'X' then LOSE elsif Hint = 'Y' then DRAW else WIN ) with 
           Pre => ( Hint in 'X'|'Y'|'Z');
         
         function Get_Result_Pair( Required_Outcome: Outcome; Elf_RPS: RPS ) return RPS is
@@ -38,7 +38,7 @@ package body Days.Day_2 with SPARK_Mode is
 
         Elf : constant RPS := Convert_To_Elf(Round_String(Round_String'First));
         You : constant RPS := Get_Result_Pair( Required_Outcome => Get_Required_Result( Round_String(Round_String'Last)),
-                                     Elf_RPS => Elf);
+                                               Elf_RPS => Elf);
     begin
         return ( Elf => Elf, You => You );
     end Convert_To_Predicted_Round;
