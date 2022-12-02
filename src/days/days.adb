@@ -1,8 +1,10 @@
 with Ada.Text_IO; use Ada.Text_IO;
-
+with Ada.Containers.Vectors;
 with Days.Day_1; use Days.Day_1;
 
 package body Days is
+    package Nat_Vec is new
+      Ada.Containers.Vectors( Index_Type => Natural, Element_Type => Natural );
 
     procedure Run_Day_1( Input_File: String ) is
         function Get_Calories_From_File( Input_File: String ) return Calories_Arr_T is
@@ -16,6 +18,7 @@ package body Days is
                 end loop;
                 return Arr;
             end Convert_Vec_To_Arr;
+            
             File : File_Type;
             Vec : Nat_Vec.Vector;
             Curr_Elf : Natural := Natural'First;
