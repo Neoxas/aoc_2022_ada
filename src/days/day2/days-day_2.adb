@@ -1,6 +1,6 @@
 package body Days.Day_2 with SPARK_Mode is
     
-    type Score_Base_T is new Natural;
+
     subtype Rps_Score_T is Score_Base_T  range 1 ..3;
     subtype Outcome_Score_T is Score_Base_T  range 0 .. 6;
     
@@ -45,7 +45,7 @@ package body Days.Day_2 with SPARK_Mode is
         return ( Elf => Elf, You => You );
     end Convert_To_Predicted_Round;
     
-    function Get_Round_Score( Round: Round_T ) return Natural is
+    function Get_Round_Score( Round: Round_T ) return Score_Base_T is
         function Get_Round_Result( Round : Round_T ) return Outcome is
         begin
             if Round.You = Round.Elf then
@@ -64,7 +64,7 @@ package body Days.Day_2 with SPARK_Mode is
         function Get_Outcome_Score( Result : Outcome ) return Outcome_Score_T is ( if Result = WIN then 6 elsif Result = DRAW then 3 else 0 );
         
     begin
-        return Integer( Get_Outcome_Score( Get_Round_Result( Round ) ) + Get_RPS_Score(Round.You) );
+        return Get_Outcome_Score( Get_Round_Result( Round ) ) + Get_RPS_Score(Round.You);
     end Get_Round_Score;
     
     function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Natural is
@@ -72,6 +72,7 @@ package body Days.Day_2 with SPARK_Mode is
     begin 
         for Round_Idx in Rounds'First .. End_Round loop
             Result := Result + Get_Round_Score( Rounds(Round_Idx) );
+            pragma Loop_Invariant( Natural'Last - Result > Get_Round_Score( Rounds( Round_Idx ) ) );
         end loop;
         return Result;
     end Get_Guide_Score;

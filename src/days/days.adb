@@ -73,7 +73,8 @@ package body Days is
                     Arr_Len := Arr_Len + 1;
                 end;
             end loop;
-            Arr_Len := Arr_Len -1;
+            -- Remove final loop addition
+            Arr_Len := Arr_Len - 1;
             Close(File);
         end Get_Rounds;
         

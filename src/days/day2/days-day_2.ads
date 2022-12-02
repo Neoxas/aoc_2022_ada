@@ -1,5 +1,4 @@
-package Days.Day_2 with SPARK_Mode Is
-    pragma Elaborate_Body;
+package Days.Day_2 with SPARK_Mode is
     type Round_Count_T is range 1 .. 10_000;
 
     type RPS is ( ROCK, PAPER, SCISSORS );
@@ -25,5 +24,7 @@ package Days.Day_2 with SPARK_Mode Is
       Pre => ( Rounds'Length > 0 and End_Round in Rounds'Range and End_Round > Rounds'First);
 
 private
-    function Get_Round_Score( Round: Round_T ) return Natural;
+    subtype Score_Base_T is Natural range 0 .. 9;
+    function Get_Round_Score( Round: Round_T ) return Score_Base_T with
+      Post => (Natural'Last - Score_Base_T'Last - 1 > Get_Round_Score'Result );
 end Days.Day_2;
