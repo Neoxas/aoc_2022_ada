@@ -1,8 +1,4 @@
 package body Days.Day_2 with SPARK_Mode is
-    
-    type Res_Lookup_Arr_T is array( RPS'Range ) of RPS;
-    
-    
     subtype Rps_Score_T is Score_Base_T  range 1 ..3;
     subtype Outcome_Score_T is Score_Base_T  range 0 .. 6;
     
@@ -26,7 +22,7 @@ package body Days.Day_2 with SPARK_Mode is
           Pre => ( Hint in 'X'|'Y'|'Z');
         
         function Get_Result_Pair( Required_Outcome: Outcome; Elf_RPS: RPS ) return RPS is
-            
+            type Res_Lookup_Arr_T is array( RPS'Range ) of RPS;
             -- If they play input, I need to play output to loose.
             Losing_Paring : constant Res_Lookup_Arr_T := ( ROCK => SCISSORS, PAPER => ROCK, SCISSORS => PAPER );
             -- If they play input, I need to play output to win.
