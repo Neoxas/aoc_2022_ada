@@ -1,8 +1,10 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Containers.Vectors;
 with Days.Day_1; use Days.Day_1;
+with Days.Day_2; use Days.Day_2;
 
 package body Days is
+    
     package Nat_Vec is new
       Ada.Containers.Vectors( Index_Type => Natural, Element_Type => Natural );
 
@@ -11,7 +13,7 @@ package body Days is
             -- Gets a Vector containing each elf with the relevant calories
             -- Each Elf in the input file is seperated by a blank line
             function Convert_Vec_To_Arr( Vec : Nat_Vec.Vector ) return Calories_Arr_T is
-                Arr : Calories_Arr_T( Natural'First .. Natural(Vec.Length) ) := ( others => Natural'First );
+                Arr : Calories_Arr_T( Natural'First .. Natural(Vec.Length) ) := ( others => Positive'First );
             begin
                 for Idx in Vec.First_Index .. Vec.Last_Index loop
                     Arr(Idx) := Vec(Idx);
@@ -54,8 +56,30 @@ package body Days is
     end Run_Day_1;
     
     procedure Run_Day_2( Input_File: String ) is
+        function Get_Rounds( Input_File: String; Arr_Len : out Round_Count_T ) return Rounds_T is
+            -- TODO: Work out better way of initalizing this
+            Rounds : Rounds_T := ( others => ( ROCK, ROCK ) );
+            File : File_Type;
+        begin
+            Arr_Len := Round_Count_T'First;
+            
+            Open( File, In_File, Input_File ); 
+            
+            while not End_Of_File( File ) loop
+                Rounds( Arr_Len ) := Convert_To_Round( Get_Line( File )( 1 .. 3 ) );
+                Arr_Len := Arr_Len + 1;
+            end loop;
+            Arr_Len := Arr_Len -1;
+            Close(File);
+            
+            return Rounds;
+        end Get_Rounds;
+        Rounds_Count : Round_Count_T;
+        Rounds : constant Rounds_T := Get_Rounds( Input_File, Rounds_Count );
     begin
-        Put_Line( Input_File );
+        Put_Line( "--- Day 2 ---" );
+        Put_Line( "Part 1");
+        Put_Line( "Rounds Score: " & Get_Guide_Score(Rounds, Rounds_Count)'Image );
     end Run_Day_2;
 
 end Days;
