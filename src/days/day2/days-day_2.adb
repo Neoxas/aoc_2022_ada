@@ -1,6 +1,8 @@
 package body Days.Day_2 with SPARK_Mode is
     
-
+    type Res_Lookup_Arr_T is array( RPS'Range ) of RPS;
+    
+    
     subtype Rps_Score_T is Score_Base_T  range 1 ..3;
     subtype Outcome_Score_T is Score_Base_T  range 0 .. 6;
     
@@ -24,7 +26,7 @@ package body Days.Day_2 with SPARK_Mode is
           Pre => ( Hint in 'X'|'Y'|'Z');
         
         function Get_Result_Pair( Required_Outcome: Outcome; Elf_RPS: RPS ) return RPS is
-            type Res_Lookup_Arr_T is array( RPS'Range ) of RPS;
+            
             -- If they play input, I need to play output to loose.
             Losing_Paring : constant Res_Lookup_Arr_T := ( ROCK => SCISSORS, PAPER => ROCK, SCISSORS => PAPER );
             -- If they play input, I need to play output to win.
@@ -46,6 +48,12 @@ package body Days.Day_2 with SPARK_Mode is
     end Convert_To_Predicted_Round;
     
     function Get_Round_Score( Round: Round_T ) return Score_Base_T is
+        type Outcome_Score_Lookup_T is array( Outcome'Range ) of Outcome_Score_T;
+        Outcome_Score_Lookup : constant Outcome_Score_Lookup_T := ( WIN => 6, DRAW => 3, LOSE => 0 );
+        
+        type RPS_Score_Lookup_T is array( RPS'Range ) of RPS_Score_T;
+        RPS_Score_Lookup : constant RPS_Score_Lookup_T := ( ROCK => 1, PAPER => 2, SCISSORS => 3 );
+        
         function Get_Round_Result( Round : Round_T ) return Outcome is
         begin
             if Round.You = Round.Elf then
@@ -59,12 +67,8 @@ package body Days.Day_2 with SPARK_Mode is
                 return LOSE;
             end if;
         end Get_Round_Result;
-        
-        function Get_RPS_Score( Choice: RPS ) return Rps_Score_T is ( if Choice = ROCK then 1 elsif Choice = PAPER then 2 else 3 );
-        function Get_Outcome_Score( Result : Outcome ) return Outcome_Score_T is ( if Result = WIN then 6 elsif Result = DRAW then 3 else 0 );
-        
     begin
-        return Get_Outcome_Score( Get_Round_Result( Round ) ) + Get_RPS_Score(Round.You);
+        return Outcome_Score_Lookup( Get_Round_Result( Round ) ) + RPS_Score_Lookup(Round.You);
     end Get_Round_Score;
     
     function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Rounds_Result_T is
