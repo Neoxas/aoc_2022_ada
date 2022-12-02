@@ -2,24 +2,25 @@ package body Days.Day_2 with SPARK_Mode is
     subtype Rps_Score_T is Score_Base_T  range 1 ..3;
     subtype Outcome_Score_T is Score_Base_T  range 0 .. 6;
     
-    function Convert_To_Elf( Hint : Character ) return RPS is 
-      ( if Hint = 'A' then ROCK elsif Hint = 'B' then PAPER else SCISSORS ) with
-      Pre => ( Hint in 'A'|'B'|'C');
+    type Elf_RPS_Lookup_T is array( ElfCode'Range ) of RPS;
+    Elf_RPS_Lookup : constant Elf_RPS_Lookup_T := ( 'A' => ROCK, 'B' => PAPER, 'C' => SCISSORS );
     
-    function Convert_To_Matched_Round( Round_String: Round_Str_T ) return Round_T is        
-        function Convert_To_You( Hint : Character ) return RPS is 
-          ( if Hint = 'X' then ROCK elsif Hint = 'Y' then PAPER else SCISSORS ) with 
-          Pre => ( Hint in 'X'|'Y'|'Z');
+    
+    
+    function Convert_To_Matched_Round( Round_String: Round_Str_T ) return Round_T is 
+        type You_RPS_Lookup_T is array( YouCode'Range ) of RPS;
+        You_RPS_Lookup : constant You_RPS_Lookup_T := ( 'X' => ROCK, 'Y' => PAPER, 'Z' => SCISSORS );
     begin
         return ( 
-                 Elf => Convert_To_Elf(Round_String(Round_String'First)), 
-                 You => Convert_To_You(Round_String(Round_String'Last)));
+                 Elf => Elf_RPS_Lookup(
+                   ElfCode'Value(Round_String(Round_String'First)'Image)), 
+                 You => You_RPS_Lookup(
+                   YouCode'Value(Round_String(Round_String'Last)'Image)));
     end Convert_To_Matched_Round;
     
     function Convert_To_Predicted_Round( Round_String: Round_Str_T ) return Round_T is
-        function Get_Required_Result( Hint : Character ) return Outcome is 
-          ( if Hint = 'X' then LOSE elsif Hint = 'Y' then DRAW else WIN ) with 
-          Pre => ( Hint in 'X'|'Y'|'Z');
+        type You_Outcome_Lookup_T is array( YouCode'Range ) of Outcome;
+        You_Outcome_Lookup : constant You_Outcome_Lookup_T := ( 'X' => LOSE, 'Y' => DRAW, 'Z' => WIN );
         
         function Get_Result_Pair( Required_Outcome: Outcome; Elf_RPS: RPS ) return RPS is
             type Res_Lookup_Arr_T is array( RPS'Range ) of RPS;
@@ -36,8 +37,8 @@ package body Days.Day_2 with SPARK_Mode is
             end case;
         end Get_Result_Pair;
 
-        Elf : constant RPS := Convert_To_Elf(Round_String(Round_String'First));
-        You : constant RPS := Get_Result_Pair( Required_Outcome => Get_Required_Result( Round_String(Round_String'Last)),
+        Elf : constant RPS := Elf_RPS_Lookup(ElfCode'Value(Round_String(Round_String'First)'Image));
+        You : constant RPS := Get_Result_Pair( Required_Outcome => You_Outcome_Lookup( YouCode'Value( Round_String(Round_String'Last)'Image)),
                                                Elf_RPS => Elf);
     begin
         return ( Elf => Elf, You => You );
