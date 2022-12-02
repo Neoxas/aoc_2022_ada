@@ -56,9 +56,8 @@ package body Days is
     end Run_Day_1;
     
     procedure Run_Day_2( Input_File: String ) is
-        function Get_Rounds( Input_File: String; Arr_Len : out Round_Count_T ) return Rounds_T is
+        procedure Get_Rounds( Input_File: String; Arr_Len : out Round_Count_T; Matched_Round : out Rounds_T; Predicted_Rounds: out Rounds_T  ) is
             -- TODO: Work out better way of initalizing this
-            Rounds : Rounds_T := ( others => ( ROCK, ROCK ) );
             File : File_Type;
         begin
             Arr_Len := Round_Count_T'First;
@@ -66,20 +65,29 @@ package body Days is
             Open( File, In_File, Input_File ); 
             
             while not End_Of_File( File ) loop
-                Rounds( Arr_Len ) := Convert_To_Round( Get_Line( File )( 1 .. 3 ) );
-                Arr_Len := Arr_Len + 1;
+                declare
+                    Line : constant Round_Str_T := Get_Line( File )( 1 .. 3 );
+                begin
+                    Matched_Round( Arr_Len ) := Convert_To_Matched_Round( Line );
+                    Predicted_Rounds( Arr_Len ) := Convert_To_Predicted_Round( Line );
+                    Arr_Len := Arr_Len + 1;
+                end;
             end loop;
             Arr_Len := Arr_Len -1;
             Close(File);
-            
-            return Rounds;
         end Get_Rounds;
+        
         Rounds_Count : Round_Count_T;
-        Rounds : constant Rounds_T := Get_Rounds( Input_File, Rounds_Count );
+        Matched_Rounds : Rounds_T ;
+        Predicted_Rounds : Rounds_T;
     begin
+        Get_Rounds( Input_File, Rounds_Count, Matched_Rounds, Predicted_Rounds );
+        
         Put_Line( "--- Day 2 ---" );
         Put_Line( "Part 1");
-        Put_Line( "Rounds Score: " & Get_Guide_Score(Rounds, Rounds_Count)'Image );
+        Put_Line( "Matched Rounds Score: " & Get_Guide_Score(Matched_Rounds, Rounds_Count)'Image );
+        Put_Line( "Part 2");
+        Put_Line( "Predicted Rounds Score: " & Get_Guide_Score(Predicted_Rounds, Rounds_Count)'Image );
     end Run_Day_2;
 
 end Days;

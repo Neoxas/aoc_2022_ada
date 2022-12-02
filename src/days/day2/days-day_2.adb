@@ -1,21 +1,44 @@
 package body Days.Day_2 with SPARK_Mode is
-    
-    function Convert_To_Round( Round_String: Round_Str_T ) return Round_T is
-
-        function Convert_To_Elf( Hint : Character ) return RPS is 
+    function Convert_To_Elf( Hint : Character ) return RPS is 
           ( if Hint = 'A' then ROCK elsif Hint = 'B' then PAPER else SCISSORS ) with
-          Pre => ( Hint in 'A'|'B'|'C');
-        
+      Pre => ( Hint in 'A'|'B'|'C');
+    
+    function Convert_To_Matched_Round( Round_String: Round_Str_T ) return Round_T is        
         function Convert_To_You( Hint : Character ) return RPS is 
           ( if Hint = 'X' then ROCK elsif Hint = 'Y' then PAPER else SCISSORS ) with 
           Pre => ( Hint in 'X'|'Y'|'Z');
     begin
         return ( 
-                 Convert_To_Elf(Round_String(Round_String'First)), 
-                 Convert_To_You(Round_String(Round_String'Last)));
-    end Convert_To_Round;
+                 Elf => Convert_To_Elf(Round_String(Round_String'First)), 
+                 You => Convert_To_You(Round_String(Round_String'Last)));
+    end Convert_To_Matched_Round;
     
-    
+    function Convert_To_Predicted_Round( Round_String: Round_Str_T ) return Round_T is
+        function Get_Required_Result( Hint : Character ) return Outcome is 
+            ( if Hint = 'X' then LOSE elsif Hint = 'Y' then DRAW else WIN ) with 
+          Pre => ( Hint in 'X'|'Y'|'Z');
+        
+        function Get_Result_Pair( Required_Outcome: Outcome; Elf_RPS: RPS ) return RPS is
+            type Res_Lookup_Arr_T is array( RPS'Range ) of RPS;
+            -- If they play input, I need to play output to loose.
+            Losing_Paring : constant Res_Lookup_Arr_T := [ ROCK => SCISSORS, PAPER => ROCK, SCISSORS => PAPER ];
+            -- If they play input, I need to play output to win.
+            Winning_Paring : constant Res_Lookup_Arr_T := [ ROCK => PAPER, PAPER => SCISSORS, SCISSORS => ROCK ];
+
+        begin
+            case Required_Outcome is
+                when DRAW => return Elf_RPS;
+                when LOSE => return Losing_Paring( Elf_RPS );
+                when WIN => return Winning_Paring( Elf_RPS );
+            end case;
+        end Get_Result_Pair;
+
+        Elf : constant RPS := Convert_To_Elf(Round_String(Round_String'First));
+        You : constant RPS := Get_Result_Pair( Required_Outcome => Get_Required_Result( Round_String(Round_String'Last)),
+                                     Elf_RPS => Elf);
+    begin
+        return ( Elf => Elf, You => You );
+    end Convert_To_Predicted_Round;
     
     function Get_Round_Score( Round: Round_T ) return Natural is
         function Get_Round_Result( Round : Round_T ) return Outcome is
