@@ -1,4 +1,9 @@
 package body Days.Day_2 with SPARK_Mode is
+    
+    type Score_Base_T is new Natural;
+    subtype Rps_Score_T is Score_Base_T  range 1 ..3;
+    subtype Outcome_Score_T is Score_Base_T  range 0 .. 6;
+    
     function Convert_To_Elf( Hint : Character ) return RPS is 
           ( if Hint = 'A' then ROCK elsif Hint = 'B' then PAPER else SCISSORS ) with
       Pre => ( Hint in 'A'|'B'|'C');
@@ -55,11 +60,11 @@ package body Days.Day_2 with SPARK_Mode is
             end if;
         end Get_Round_Result;
         
-        function Get_RPS_Score( Choice: RPS ) return Natural is ( if Choice = ROCK then 1 elsif Choice = PAPER then 2 else 3 );
-        function Get_Outcome_Score( Result : Outcome ) return Natural is ( if Result = WIN then 6 elsif Result = DRAW then 3 else 0 );
+        function Get_RPS_Score( Choice: RPS ) return Rps_Score_T is ( if Choice = ROCK then 1 elsif Choice = PAPER then 2 else 3 );
+        function Get_Outcome_Score( Result : Outcome ) return Outcome_Score_T is ( if Result = WIN then 6 elsif Result = DRAW then 3 else 0 );
         
     begin
-        return Get_Outcome_Score( Get_Round_Result( Round ) ) + Get_RPS_Score(Round.You);
+        return Integer( Get_Outcome_Score( Get_Round_Result( Round ) ) + Get_RPS_Score(Round.You) );
     end Get_Round_Score;
     
     function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Natural is
