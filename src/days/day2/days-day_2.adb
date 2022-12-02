@@ -67,12 +67,12 @@ package body Days.Day_2 with SPARK_Mode is
         return Get_Outcome_Score( Get_Round_Result( Round ) ) + Get_RPS_Score(Round.You);
     end Get_Round_Score;
     
-    function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Natural is
-        Result: Natural := Natural'First;
+    function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Rounds_Result_T is
+        Result: Rounds_Result_T := Rounds_Result_T'First;
     begin 
         for Round_Idx in Rounds'First .. End_Round loop
+            pragma Loop_Invariant(Rounds_Result_T'Last - Score_Base_T'Last > Result );
             Result := Result + Get_Round_Score( Rounds(Round_Idx) );
-            pragma Loop_Invariant( Natural'Last - Result > Get_Round_Score( Rounds( Round_Idx ) ) );
         end loop;
         return Result;
     end Get_Guide_Score;

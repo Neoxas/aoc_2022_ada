@@ -1,5 +1,10 @@
 package Days.Day_2 with SPARK_Mode is
-    type Round_Count_T is range 1 .. 10_000;
+    END_ROUND : constant := 10_000;
+    BIGGEST_SCORE : constant := 9;
+
+    type Round_Count_T is range 1 .. END_ROUND;
+    type Rounds_Result_T is range 0 .. END_ROUND * BIGGEST_SCORE;
+
 
     type RPS is ( ROCK, PAPER, SCISSORS );
     type Outcome is ( LOSE, DRAW, WIN );
@@ -20,11 +25,11 @@ package Days.Day_2 with SPARK_Mode is
       Pre => ( Round_String( Round_String'First ) in 'A'| 'B' | 'C'
                and Round_String( Round_String'Last ) in 'X' | 'Y' | 'Z' ) ;
 
-    function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Natural with
+    function Get_Guide_Score( Rounds: Rounds_T; End_Round: Round_Count_T ) return Rounds_Result_T with
       Pre => ( Rounds'Length > 0 and End_Round in Rounds'Range and End_Round > Rounds'First);
 
 private
-    subtype Score_Base_T is Natural range 0 .. 9;
+    subtype Score_Base_T is Rounds_Result_T range 0 .. BIGGEST_SCORE;
     function Get_Round_Score( Round: Round_T ) return Score_Base_T with
-      Post => (Natural'Last - Score_Base_T'Last - 1 > Get_Round_Score'Result );
+      Post => (Rounds_Result_T'Last - Score_Base_T'Last > Get_Round_Score'Result );
 end Days.Day_2;
