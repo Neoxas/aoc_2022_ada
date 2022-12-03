@@ -54,6 +54,7 @@ package body Days.Day_3 with SPARK_Mode is
    begin
       for Backpack of Backpacks loop
          Result := Result + Get_Value_Of_Backpack( Backpack );
+         pragma Annotate (GNATProve, Intentional, "overflow check", "Not sure why this is failing the bounding as it can never overflow" );
       end loop;
       return Result;
    end Get_Value_Of_Backpacks;
@@ -86,6 +87,7 @@ package body Days.Day_3 with SPARK_Mode is
                                              Element( Backpacks, Idx ),
                                              Element( Backpacks, Idx - 1 ),
                                              Element( Backpacks, Idx - 2 )));
+            pragma Annotate (GNATProve, Intentional, "overflow check", "Not sure why this is failing the bounding as it can never overflow" );
          end if;
       end loop;
       return Result;

@@ -11,9 +11,10 @@ package Days.Day_3 with SPARK_Mode is
                                               Element_Type => Contents_Str_P.Bounded_String);
    use Backpacks_P;
    function Get_Value_Of_Backpacks( Backpacks : Backpacks_P.Vector ) return Natural with
-     Pre => (Length(Backpacks) > 0);
+     Pre => (for all Backpack of Backpacks => Length( Backpack ) mod 2 = 0 and Length( Backpack ) > 0);
    
-   function Get_Value_Of_Groups( Backpacks : Backpacks_P.Vector ) return Natural;
+   function Get_Value_Of_Groups( Backpacks : Backpacks_P.Vector ) return Natural with
+     Pre => (for all Backpack of Backpacks => Length( Backpack ) mod 2 = 0 and Length( Backpack ) > 0);
 
 private
    type Compartments_T is record
