@@ -89,6 +89,12 @@ package body Days is
         Put_Line( "Matched Rounds Score: " & Get_Guide_Score(Matched_Rounds, Rounds_Count)'Image );
         Put_Line( "Part 2");
         Put_Line( "Predicted Rounds Score: " & Get_Guide_Score(Predicted_Rounds, Rounds_Count)'Image );
-    end Run_Day_2;
+   end Run_Day_2;
+   
+   procedure Run_Day_3( Input_File: String ) is
+   begin
+      Put_Line( "Hello, Day 3" );
+      Put_Line( Input_File );
+   end Run_Day_3;
 
 end Days;
