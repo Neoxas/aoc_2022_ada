@@ -12,6 +12,8 @@ package Days.Day_3 with SPARK_Mode is
    use Backpacks_P;
    function Get_Value_Of_Backpacks( Backpacks : Backpacks_P.Vector ) return Natural with
      Pre => (Length(Backpacks) > 0);
+   
+   function Get_Value_Of_Groups( Backpacks : Backpacks_P.Vector ) return Natural;
 
 private
    type Compartments_T is record

@@ -18,6 +18,16 @@ package body Days.Day_3 with SPARK_Mode is
                Compartment_2 => Bounded_Slice( Backpack, (Length(Backpack) / 2) + 1 , Length(Backpack) ) );
    end Split_Backpack_Contents;
       
+   function Lookup_Value( Char : Character ) return Natural is
+   begin
+      if Char in Lower_Lookup'Range then
+         return Lower_Lookup( Char );
+      elsif Char in Upper_Lookup'Range then
+         return Upper_Lookup( Char );
+      else
+         return 0;
+      end if;
+   end Lookup_Value;
             
    function Get_Value_Of_Backpack ( Backpack: Contents_Str_P.Bounded_String ) return Natural is 
       function Get_Matching_Char( Compartments : Compartments_T ) return Character is
@@ -36,13 +46,7 @@ package body Days.Day_3 with SPARK_Mode is
       
       Char : constant Character := Get_Matching_Char( Split_Backpack_Contents( Backpack ));
    begin
-      if Char in Lower_Lookup'Range then
-         return Lower_Lookup( Char );
-      elsif Char in Upper_Lookup'Range then
-         return Upper_Lookup( Char );
-      else
-         return 0;
-      end if;
+      return Lookup_Value( Char );
    end Get_Value_Of_Backpack;
    
    function Get_Value_Of_Backpacks( Backpacks : Backpacks_P.Vector ) return Natural is
@@ -53,5 +57,38 @@ package body Days.Day_3 with SPARK_Mode is
       end loop;
       return Result;
    end Get_Value_Of_Backpacks;
+   
+   function Get_Value_Of_Groups( Backpacks : Backpacks_P.Vector ) return Natural is
+      function Check_Group_Membership( Backpack_1: Contents_Str_P.Bounded_String;
+                                       Backpack_2: Contents_Str_P.Bounded_String;
+                                       Backpack_3: Contents_Str_P.Bounded_String ) return Character is
+         Char : Character := ' ';
+      begin
+         for Back_1_Idx in 1 .. Length(Backpack_1) loop
+            Char := Element( Backpack_1, Back_1_Idx );
+            for Back_2_Idx in 1 .. Length( Backpack_2 ) loop
+               if Char = Element( Backpack_2, Back_2_Idx ) then
+                  for Back_3_Idx in 1 .. Length( Backpack_3 ) loop
+                     if Char = Element( Backpack_3, Back_3_Idx ) then
+                        return Char;
+                     end if;
+                  end loop;
+               end if;
+            end loop;
+         end loop;
+         return Char;
+      end Check_Group_Membership;
+      Result : Natural := 0;
+   begin
+      for Idx in First_Index( Backpacks ) .. Last_Index( Backpacks ) loop
+         if Idx mod 3 = 0 then 
+            Result := Result + Lookup_Value( Check_Group_Membership( 
+                                             Element( Backpacks, Idx ),
+                                             Element( Backpacks, Idx - 1 ),
+                                             Element( Backpacks, Idx - 2 )));
+         end if;
+      end loop;
+      return Result;
+   end Get_Value_Of_Groups;
 
 end Days.Day_3;

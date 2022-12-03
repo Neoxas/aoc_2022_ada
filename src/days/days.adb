@@ -116,10 +116,13 @@ package body Days is
       
       Backpacks : constant Backpacks_P.Vector := Get_Backpacks( Input_File );
       Duplicates : constant Natural := Get_Value_Of_Backpacks( Backpacks );
+      Memberships : constant Natural := Get_Value_Of_Groups( Backpacks );
    begin
       Put_Line( "--- Day 3 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Value of backpack duplicates : " & Duplicates'Image );
+      Put_Line( "Part 2" );
+      Put_Line( "Value of group memberships : " & Memberships'Image );
    end Run_Day_3;
 
 end Days;
