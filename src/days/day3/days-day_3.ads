@@ -24,4 +24,7 @@ private
    function Split_Backpack_Contents( Backpack : Contents_Str_P.Bounded_String ) return Compartments_T with
      Pre => ( Length( Backpack ) mod 2 = 0 and Length( Backpack ) > 0),
      Post => (Length(Split_Backpack_Contents'Result.Compartment_1) = Length(Split_Backpack_Contents'Result.Compartment_2));
+   
+   function Get_Value_Of_Backpack ( Backpack: Contents_Str_P.Bounded_String ) return Natural with
+     Pre => ( Length(Backpack) > 0 and Length( Backpack ) mod 2 = 0 );
 end Days.Day_3;
