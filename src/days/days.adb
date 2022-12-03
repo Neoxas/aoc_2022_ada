@@ -115,9 +115,11 @@ package body Days is
       end Get_Backpacks;
       
       Backpacks : constant Backpacks_P.Vector := Get_Backpacks( Input_File );
+      Duplicates : constant Natural := Get_Value_Of_Backpacks( Backpacks );
    begin
-      Put_Line( "Hello, Day 3" );
-      Put_Line( To_String( Element( Backpacks, First_Index( Backpacks ) ) ) );
+      Put_Line( "--- Day 3 ---" );
+      Put_Line( "Part 1" );
+      Put_Line( "Value of backpack duplicates : " & Duplicates'Image );
    end Run_Day_3;
 
 end Days;
