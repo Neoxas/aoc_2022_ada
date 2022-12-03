@@ -94,32 +94,30 @@ package body Days is
    
    procedure Run_Day_3( Input_File: String ) is
       use Backpacks_P;
+      use Contents_Str_P;
       function Get_Backpacks( Input_File: String ) return Backpacks_P.Vector is
          File : File_Type;
          Backpacks : Backpacks_P.Vector( MAX_BACKPACK_SIZE );
-         str : Backpack_Str_T := (others => ' ' );
       begin
          Open( File, In_File, Input_File );
          
          while not End_Of_File( File ) loop
             declare
-               Line : String := Get_Line( File );
+               Line : constant Contents_Str_P.Bounded_String := To_Bounded_String( Get_Line( File ));
             begin
-               str( str'First .. Line'Length ) := Line;
-               str( str'First + Line'Length .. str'Last ) := ( others => ' ' );
-               Append( Backpacks, str );
+               Append( Backpacks, Line );
             end ;
          end loop;
          
          Close( File );
-         Append( Backpacks, str );
+         
          return Backpacks;
       end Get_Backpacks;
       
       Backpacks : constant Backpacks_P.Vector := Get_Backpacks( Input_File );
    begin
       Put_Line( "Hello, Day 3" );
-      Put_Line( String( Element( Backpacks, First_Index( Backpacks ) ) ) );
+      Put_Line( To_String( Element( Backpacks, First_Index( Backpacks ) ) ) );
    end Run_Day_3;
 
 end Days;
