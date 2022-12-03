@@ -1,5 +1,3 @@
-With Ada.Text_IO; use Ada.Text_IO;
-
 package body Days.Day_3 with SPARK_Mode is
    
    type Lower_Lookup_T is array( Character range 'a' .. 'z' ) of Natural;
@@ -11,10 +9,7 @@ package body Days.Day_3 with SPARK_Mode is
                                                38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
                                                49, 50, 51, 52);
                                                
-   type Compartments_T is record
-      Compartment_1 : Contents_Str_P.Bounded_String;
-      Compartment_2 : Contents_Str_P.Bounded_String;
-   end record;
+
    
    function Split_Backpack_Contents( Backpack : Contents_Str_P.Bounded_String ) return Compartments_T is
    begin
