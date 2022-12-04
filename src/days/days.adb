@@ -129,6 +129,6 @@ package body Days is
    begin
       Put_Line( "--- Day 4 ---" );
       Put_Line( "Part 1" );
-   end Run_Day_3;
+   end Run_Day_4;
 
 end Days;
