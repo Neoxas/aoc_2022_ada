@@ -11,13 +11,19 @@ package Days.Day_4 with SPARK_Mode is
                                               Element_Type => Cleaning_Str_P.Bounded_String);
    use Cleaning_Vec_P;
    
-   function Count_Fully_Overlapping_Cleaning( Cleaning_Vec : Cleaning_Vec_P.Vector ) return Natural;
+   function Count_Fully_Overlapping_Cleaning( Cleaning_Vec : Cleaning_Vec_P.Vector ) return Natural with 
+     Pre => ( Length( Cleaning_Vec ) > 0 );
    
-   function Count_Partly_Overlapping_Cleaning( Cleaning_Vec : Cleaning_Vec_P.Vector ) return Natural;
+   function Count_Partly_Overlapping_Cleaning( Cleaning_Vec : Cleaning_Vec_P.Vector ) return Natural with 
+     Pre => ( Length( Cleaning_Vec ) > 0 );
 private
    type Elf_R is record
       Start : Natural;
       Finish : Natural;
    end record with 
      Predicate => ( Finish > Start );
+   
+   procedure Split_String( Str: Cleaning_Str_P.Bounded_String; Split: String; LHS_Str: out Cleaning_Str_P.Bounded_String;  RHS_Str: out Cleaning_Str_P.Bounded_String) with
+     Pre => ( Length( Str ) > 0 and Split'Length = 1 and ( for some I in 1 .. Length( Str ) => Element( Str, I ) = Split( Split'First ) )),
+     Post => (Length( LHS_Str ) > 0 and Length( RHS_Str ) > 0 );
 end Days.Day_4;
