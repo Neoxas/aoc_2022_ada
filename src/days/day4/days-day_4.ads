@@ -12,6 +12,8 @@ package Days.Day_4 with SPARK_Mode is
    use Cleaning_Vec_P;
    
    function Count_Fully_Overlapping_Cleaning( Cleaning_Vec : Cleaning_Vec_P.Vector ) return Natural;
+   
+   function Count_Partly_Overlapping_Cleaning( Cleaning_Vec : Cleaning_Vec_P.Vector ) return Natural;
 private
    type Elf_R is record
       Start : Natural;

@@ -33,6 +33,9 @@ package body Days.Day_4 with SPARK_Mode is
            ( Elf_1.Start <= Elf_2.Start and Elf_1.Finish >= Elf_2.Finish ) )
       then True else False);
    
+   function Partly_Overlap( Elf_1 : Elf_R; Elf_2 : Elf_R ) return Boolean is 
+     (for some I in Elf_1.Start .. Elf_1.Finish => ( for some J in Elf_2.Start .. Elf_2.Finish => I = J));
+   
    function Count_Fully_Overlapping_Cleaning( Cleaning_Vec : Clean_Vec ) return Natural is
       Elf_1: Elf_R;
       Elf_2: Elf_R;
@@ -46,6 +49,20 @@ package body Days.Day_4 with SPARK_Mode is
       end loop;
       return Result;
    end Count_Fully_Overlapping_Cleaning;
+   
+   function Count_Partly_Overlapping_Cleaning( Cleaning_Vec : Clean_Vec ) return Natural is
+      Elf_1: Elf_R;
+      Elf_2: Elf_R;
+      Result: Natural := 0;
+   begin
+      for Cleaning of Cleaning_Vec loop
+         Get_Elves( Cleaning, Elf_1, Elf_2 );
+         if Partly_Overlap( Elf_1, Elf_2 ) then
+            Result := Result + 1;
+         end if;
+      end loop;
+      return Result;
+   end Count_Partly_Overlapping_Cleaning;
    
 
 end Days.Day_4;

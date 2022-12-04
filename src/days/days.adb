@@ -145,10 +145,13 @@ package body Days is
       end Get_Cleaning_Vec;
       Cleaning_Vec : constant Cleaning_Vec_P.Vector := Get_Cleaning_Vec( Input_File );
       Fully_Overlap: constant Natural := Count_Fully_Overlapping_Cleaning( Cleaning_Vec );
+      Partly_Overlap: constant Natural := Count_Partly_Overlapping_Cleaning( Cleaning_Vec );
    begin
       Put_Line( "--- Day 4 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Count of fully overlapping : " & Fully_Overlap'Image );
+      Put_Line( "Part 2" );
+      Put_Line( "Count of partly overlapping : " & Partly_Overlap'Image );
    end Run_Day_4;
 
 end Days;
