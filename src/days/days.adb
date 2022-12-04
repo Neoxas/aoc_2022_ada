@@ -3,6 +3,7 @@ with Ada.Containers.Vectors;
 with Days.Day_1; use Days.Day_1;
 with Days.Day_2; use Days.Day_2;
 with Days.Day_3; use Days.Day_3;
+with Days.Day_4; use Days.Day_4;
 
 package body Days is
     
@@ -126,9 +127,28 @@ package body Days is
    end Run_Day_3;
    
    procedure Run_Day_4( Input_File: String ) is
+      use Cleaning_Str_P;
+      use Cleaning_Vec_P;
+      
+      function Get_Cleaning_Vec( Input_File: String ) return Cleaning_Vec_P.Vector is
+         File: File_Type;
+         Cleaning_Vec : Cleaning_Vec_P.Vector(MAX_CLEANING_VEC_SIZE);
+      begin
+         Open( File, In_File, Input_File );
+         
+         while not End_Of_File( File ) loop
+            Append( Cleaning_Vec, To_Bounded_String( Get_Line( File ) ) );
+         end loop;
+         
+         Close(File);
+         return Cleaning_Vec;
+      end Get_Cleaning_Vec;
+      Cleaning_Vec : constant Cleaning_Vec_P.Vector := Get_Cleaning_Vec( Input_File );
+      Fully_Overlap: constant Natural := Count_Fully_Overlapping_Cleaning( Cleaning_Vec );
    begin
       Put_Line( "--- Day 4 ---" );
       Put_Line( "Part 1" );
+      Put_Line( "Count of fully overlapping : " & Fully_Overlap'Image );
    end Run_Day_4;
 
 end Days;
