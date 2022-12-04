@@ -124,5 +124,11 @@ package body Days is
       Put_Line( "Part 2" );
       Put_Line( "Value of group memberships : " & Memberships'Image );
    end Run_Day_3;
+   
+   procedure Run_Day_4( Input_File: String ) is
+   begin
+      Put_Line( "--- Day 4 ---" );
+      Put_Line( "Part 1" );
+   end Run_Day_3;
 
 end Days;
