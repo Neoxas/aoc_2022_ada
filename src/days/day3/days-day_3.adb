@@ -18,7 +18,7 @@ package body Days.Day_3 with SPARK_Mode is
                Compartment_2 => Bounded_Slice( Backpack, (Length(Backpack) / 2) + 1 , Length(Backpack) ) );
    end Split_Backpack_Contents;
       
-   function Lookup_Value( Char : Character ) return Natural is
+   function Lookup_Value( Char : Character ) return Natural with Post => ( Lookup_Value'Result >= 0 and Lookup_Value'Result <= 52) is
    begin
       if Char in Lower_Lookup'Range then
          return Lower_Lookup( Char );
@@ -87,8 +87,9 @@ package body Days.Day_3 with SPARK_Mode is
                                              Element( Backpacks, Idx ),
                                              Element( Backpacks, Idx - 1 ),
                                              Element( Backpacks, Idx - 2 )));
-            pragma Annotate (GNATProve, Intentional, "overflow check", "Not sure why this is failing the bounding as it can never overflow" );
          end if;
+         pragma Loop_Invariant( Result <= ( Idx ) * 52 );
+         pragma Loop_Variant( Increases => Idx );
       end loop;
       return Result;
    end Get_Value_Of_Groups;

@@ -5,8 +5,11 @@ package Days.Day_3 with SPARK_Mode is
    MAX_CONTENTS_SIZE : constant := 50;
    
    package Contents_Str_P is new Ada.Strings.Bounded.Generic_Bounded_Length( MAX_CONTENTS_SIZE );
+   -- TODO: Put predicates on strings
+   subtype Content_Str_Bounded is Contents_Str_P.Bounded_String with Predicate => ( Length( Content_Str_Bounded ) > 0 );
    
    use Contents_Str_P;
+   -- TODO: Bound this range to not be on positive.
    package Backpacks_P is new Formal_Vectors (Index_Type   => Positive,
                                               Element_Type => Contents_Str_P.Bounded_String);
    use Backpacks_P;
