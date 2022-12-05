@@ -8,10 +8,12 @@ begin
     if Day = "1" then
         Run_Day_1(Filename);
     elsif Day = "2" then
-      Run_Day_2(Filename);
-   elsif Day = "3" then
-      Run_Day_3(Filename);
-   elsif Day = "4" then
-      Run_Day_4(Filename);
+        Run_Day_2(Filename);
+    elsif Day = "3" then
+        Run_Day_3(Filename);
+    elsif Day = "4" then
+        Run_Day_4(Filename);
+    elsif Day = "5" then
+        Run_Day_5(Filename);
     end if;
 end Aoc_2022_Ada;

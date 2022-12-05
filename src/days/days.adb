@@ -154,4 +154,9 @@ package body Days is
       Put_Line( "Count of partly overlapping : " & Partly_Overlap'Image );
    end Run_Day_4;
 
+    procedure Run_Day_5( Input_File: String ) is
+    begin
+        Put_Line( Input_File );
+    end Run_Day_5;
+
 end Days;
