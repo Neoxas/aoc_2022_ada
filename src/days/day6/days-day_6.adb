@@ -1,4 +1,4 @@
-package body Days.Day_6 is
+package body Days.Day_6 with SPARK_Mode is
    
    function All_Entries_In_Slice_Unique( Slice : Search_Str_P.Bounded_String ) return Boolean is 
       ( for all I in 1 .. Length(Slice) => 

@@ -1,5 +1,5 @@
 with Ada.Strings.Bounded;
-package Days.Day_6 is
+package Days.Day_6 with SPARK_Mode is
 
    MAX_SEARCH_STRING : constant := 5000;
    package Search_Str_P is new Ada.Strings.Bounded.Generic_Bounded_Length( MAX_SEARCH_STRING );
