@@ -173,7 +173,7 @@ package body Days is
 
       Str : constant Search_Str_P.Bounded_String := Get_Search_String( Input_File );
       Packet_Idx : constant Window_Size_T := Find_First_Non_Overlap( Str, 4 );
-      Message_Idx : constant Window_Size_T := Find_First_Non_Overlap( Str, 13 ) + 1;
+      Message_Idx : constant Window_Size_T := Find_First_Non_Overlap( Str, 14 );
    begin
       Put_Line( "--- Day 6 ---" );
       Put_Line( "Part 1" );
