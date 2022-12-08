@@ -52,10 +52,11 @@ package body Days.Day_3 with SPARK_Mode is
    function Get_Value_Of_Backpacks( Backpacks : Backpacks_P.Vector ) return Natural is
       Result : Natural := 0;
    begin
-      for Backpack of Backpacks loop
-         Result := Result + Get_Value_Of_Backpack( Backpack );
-         pragma Annotate (GNATProve, Intentional, "overflow check", "Not sure why this is failing the bounding as it can never overflow" );
-      end loop;
+      for B_Idx in First_Index(Backpacks) .. Last_Index( Backpacks ) loop
+         Result := Result + Get_Value_Of_Backpack( Element(Backpacks, B_Idx) );
+         pragma Loop_Invariant( Result <= B_Idx * 52 );
+         pragma Loop_Variant( Increases => B_Idx );
+         end loop;
       return Result;
    end Get_Value_Of_Backpacks;
    
