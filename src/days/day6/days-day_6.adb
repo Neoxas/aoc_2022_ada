@@ -12,6 +12,8 @@ package body Days.Day_6 is
       for Idx in 1 .. Window_Size_T(Length(String)) - Size loop
          Slice := Bounded_Slice(String, Idx, Idx + Size );
          if All_Entries_In_Slice_Unique( Slice ) then
+            -- There appears to be an out by one error here for some reason. 
+            -- This is only for message, not packet marker.
             First_Idx := Idx + Size - 1;
             exit;
          end if;
