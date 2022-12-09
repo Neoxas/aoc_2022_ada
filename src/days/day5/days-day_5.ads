@@ -5,7 +5,7 @@ with Ada.Strings.Bounded; use Ada.Strings;
 
 package Days.Day_5 with SPARK_Mode is
    MAX_CONTAINTER_STR : constant := 200;
-   MAX_INSTRUCTIONS : constant := 200;
+   MAX_INSTRUCTIONS : constant := 1000;
    MAX_STACKS : constant := 20;
    MAX_CRATES : constant := 100;
    
@@ -14,9 +14,9 @@ package Days.Day_5 with SPARK_Mode is
    
    type Instruction_Idx_T is range 1 .. MAX_INSTRUCTIONS;
    type Instructions_T is record
-      From : Positive;
+      From : Stacks_T;
       To : Stacks_T;
-      Amount : Stacks_T;
+      Amount : Positive;
    end record;
    
    package Containter_Str_P is new Ada.Strings.Bounded.Generic_Bounded_Length( MAX_CONTAINTER_STR );

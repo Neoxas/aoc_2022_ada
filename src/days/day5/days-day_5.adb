@@ -1,4 +1,3 @@
-with Ada.Text_IO; use Ada.Text_IO;
 package body Days.Day_5 with SPARK_Mode is
 	use Containter_Str_P;
    use Stacks_Vec_P;
@@ -6,7 +5,6 @@ package body Days.Day_5 with SPARK_Mode is
    
    procedure Process_Crates_Str( Container_Str : Containter_Str_P.Bounded_String; Stacks_Vec : in out Stacks_Vec_P.Vector ) is
    begin
-      Put_Line( To_String( Container_Str ) );
       for Char_Idx in 1 .. Length(Container_Str) loop
          if Element(Container_Str, Char_Idx ) in Crates_T then
             declare 
