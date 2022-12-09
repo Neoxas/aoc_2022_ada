@@ -161,8 +161,9 @@ package body Days is
       use Instruction_Str_P;
       use Crate_Stack_P;
       use Stacks_Vec_P;
+      use Instructions_Vec_P;
       Stacks : Stacks_Vec_P.Vector(MAX_STACKS);
-      
+      Instructions : Instructions_Vec_P.Vector(MAX_INSTRUCTIONS);
       File: File_Type;
    begin
       Initialize_Crate_Stacks(Stacks);
@@ -173,6 +174,7 @@ package body Days is
          declare
             Line : constant Containter_Str_P.Bounded_String := To_Bounded_String(Get_Line( File ));
          begin
+            Put_Line( To_String(Line) );
             if Line /= "" then
                Process_Crates_Str( Line, Stacks );
             else
@@ -180,20 +182,28 @@ package body Days is
             end if;
          end;
       end loop;
-      Close( File );
       
-      for I in First_Index( Stacks ) .. Last_Index( Stacks ) loop
-         declare 
-            Crates : constant Crate_Stack_P.Vector := Element( Stacks, I );
+      while not End_Of_File( File ) loop
+         declare
+            Instruction : constant Instructions_T := Process_Instruction_Str( To_Bounded_String( Get_Line( File ) ) );
          begin
-            Put_Line("");
-            for J in First_Index( Crates ) .. Last_Index( Crates ) loop
-               Put_Line( Element( Crates, J )'Image);
-            end loop;
+            Append( Instructions, Instruction );
          end;
       end loop;
-                         
       
+      Close( File );
+      
+      Execute_Instructions_On_Stacks( Stacks, Instructions );
+      
+      For I in First_Index( Stacks ) .. Last_Index( Stacks ) loop
+         declare
+            Stack : constant Crate_Stack_P.Vector := Element( Stacks, I );
+         begin
+            if not Is_Empty( Stack ) then
+               Put( Last_Element( Stack ) );
+            end if;
+         end;
+      end loop;
    end Run_Day_5;
    
    procedure Run_Day_6( Input_File: String ) is
