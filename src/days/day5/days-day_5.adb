@@ -73,25 +73,49 @@ package body Days.Day_5 with SPARK_Mode is
       end loop;
    end Initialize_Crate_Stacks;
    
-   procedure Execute_Instructions_On_Stacks( Stacks: in out Stacks_Vec_P.Vector; Instructions : Instructions_Vec_P.Vector ) is
+   procedure Mover_9000_Instructions_On_Stacks( Stacks: in out Stacks_Vec_P.Vector; Instructions : Instructions_Vec_P.Vector ) is
    begin
       for Inst_Idx in Instructions_Vec_P.First_Index( Instructions ) .. Instructions_Vec_P.Last_Index( Instructions ) loop
          declare 
             Instruction : constant Instructions_T := Instructions_Vec_P.Element( Instructions, Inst_Idx );
          begin
+            declare
+               From_Stack: Crate_Stack_P.Vector := Element( Stacks, Instruction.From );
+               To_Stack: Crate_Stack_P.Vector := Element( Stacks, Instruction.To );
+               Tmp : Crates_T;
+            begin
             for I in 1 .. Instruction.Amount loop
-               declare
-                  From_Stack: Crate_Stack_P.Vector := Element( Stacks, Instruction.From );
-                  To_Stack: Crate_Stack_P.Vector := Element( Stacks, Instruction.To );
-                  Tmp : constant Crates_T := Last_Element( From_Stack );
-               begin
+                  Tmp := Last_Element( From_Stack );
                   Delete_Last( From_Stack );
                   Append( To_Stack, Tmp );
-                  Replace_Element( Stacks, Instruction.From, From_Stack );
-                  Replace_Element( Stacks, Instruction.To, To_Stack );
-               end;
-            end loop;
+               end loop;
+               Replace_Element( Stacks, Instruction.From, From_Stack );
+               Replace_Element( Stacks, Instruction.To, To_Stack );
+            end;
          end;
       end loop;
-   end Execute_Instructions_On_Stacks;
+   end Mover_9000_Instructions_On_Stacks;
+   
+   procedure Mover_9001_Instructions_On_Stacks( Stacks: in out Stacks_Vec_P.Vector; Instructions : Instructions_Vec_P.Vector ) is
+   begin
+      for Inst_Idx in Instructions_Vec_P.First_Index( Instructions ) .. Instructions_Vec_P.Last_Index( Instructions ) loop
+         declare 
+            Instruction : constant Instructions_T := Instructions_Vec_P.Element( Instructions, Inst_Idx );
+         begin
+            declare
+               From_Stack: Crate_Stack_P.Vector := Element( Stacks, Instruction.From );
+               To_Stack: Crate_Stack_P.Vector := Element( Stacks, Instruction.To );
+               Tmp : Crates_T;
+            begin
+               for I in reverse 1 .. Instruction.Amount loop
+                  Tmp := Element( From_Stack, Integer(Length( From_Stack )) - I + 1 );
+                  Append( To_Stack, Tmp );
+                  Delete( From_Stack, Positive( Length( From_Stack ) ) - I + 1 );
+               end loop;
+               Replace_Element( Stacks, Instruction.From, From_Stack );
+               Replace_Element( Stacks, Instruction.To, To_Stack );
+            end;
+         end;
+      end loop;
+   end Mover_9001_Instructions_On_Stacks;
 end Days.Day_5;

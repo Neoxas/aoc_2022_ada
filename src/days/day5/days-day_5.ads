@@ -33,6 +33,7 @@ package Days.Day_5 with SPARK_Mode is
    procedure Process_Crates_Str( Container_Str : Containter_Str_P.Bounded_String; Stacks_Vec : in out Stacks_Vec_P.Vector ); 
    procedure Initialize_Crate_Stacks( Stacks: in out Stacks_Vec_P.Vector );
    function Process_Instruction_Str( Instruction_Str : Instruction_Str_P.Bounded_String) return Instructions_T;
-   procedure Execute_Instructions_On_Stacks( Stacks: in out Stacks_Vec_P.Vector; Instructions : Instructions_Vec_P.Vector );
+   procedure Mover_9000_Instructions_On_Stacks( Stacks: in out Stacks_Vec_P.Vector; Instructions : Instructions_Vec_P.Vector );
+   procedure Mover_9001_Instructions_On_Stacks( Stacks: in out Stacks_Vec_P.Vector; Instructions : Instructions_Vec_P.Vector );
      
 end Days.Day_5;

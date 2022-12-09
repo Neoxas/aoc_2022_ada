@@ -163,26 +163,32 @@ package body Days is
       use Stacks_Vec_P;
       use Instructions_Vec_P;
       Stacks : Stacks_Vec_P.Vector(MAX_STACKS);
+      Stacks_2 : Stacks_Vec_P.Vector( MAX_STACKS );
       Instructions : Instructions_Vec_P.Vector(MAX_INSTRUCTIONS);
       File: File_Type;
    begin
       Initialize_Crate_Stacks(Stacks);
-		Put_Line( "--- Day 5 ---" );
+      Initialize_Crate_Stacks(Stacks_2);
+      
+      Put_Line( "--- Day 5 ---" );
       Put_Line( "Part 1" );
+      
       Open( File, In_File, Input_File);
       while not End_Of_File( File ) loop
          declare
             Line : constant Containter_Str_P.Bounded_String := To_Bounded_String(Get_Line( File ));
          begin
-            Put_Line( To_String(Line) );
+            -- An empty line is what defines the gap between crates and instructions.
             if Line /= "" then
                Process_Crates_Str( Line, Stacks );
+               Process_Crates_Str( Line, Stacks_2 );
             else
                exit;
             end if;
          end;
       end loop;
       
+      -- All remaining entries are instructions
       while not End_Of_File( File ) loop
          declare
             Instruction : constant Instructions_T := Process_Instruction_Str( To_Bounded_String( Get_Line( File ) ) );
@@ -193,11 +199,25 @@ package body Days is
       
       Close( File );
       
-      Execute_Instructions_On_Stacks( Stacks, Instructions );
-      
+      -- Execute normal instructions on stack
+      Mover_9000_Instructions_On_Stacks( Stacks, Instructions );
       For I in First_Index( Stacks ) .. Last_Index( Stacks ) loop
          declare
             Stack : constant Crate_Stack_P.Vector := Element( Stacks, I );
+         begin
+            if not Is_Empty( Stack ) then
+               Put( Last_Element( Stack ) );
+            end if;
+         end;
+      end loop;
+      
+      Put_Line("");
+      Put_Line( "Part 2");
+      
+      Mover_9001_Instructions_On_Stacks( Stacks_2, Instructions );
+      For I in First_Index( Stacks_2 ) .. Last_Index( Stacks_2 ) loop
+         declare
+            Stack : constant Crate_Stack_P.Vector := Element( Stacks_2, I );
          begin
             if not Is_Empty( Stack ) then
                Put( Last_Element( Stack ) );
