@@ -6,6 +6,7 @@ with Days.Day_3; use Days.Day_3;
 with Days.Day_4; use Days.Day_4;
 with Days.Day_5; use Days.Day_5;
 with Days.Day_6; use Days.Day_6;
+with Days.Day_8; use Days.Day_8;
 
 package body Days is
     
@@ -252,5 +253,12 @@ package body Days is
       Put_Line( "Part 2" );
       Put_Line( "Idx of Start of Message Marker : " & Message_Idx'Image );
    end Run_Day_6;
+   
+   procedure Run_Day_8( Input_File: String ) is
+   begin
+      Put_Line( "--- Day 6 ---" );
+      Put_Line( "Part 1" );
+      Put_Line( Input_File );
+   end Run_Day_8;
 
 end Days;
