@@ -4,6 +4,7 @@ with Days.Day_1; use Days.Day_1;
 with Days.Day_2; use Days.Day_2;
 with Days.Day_3; use Days.Day_3;
 with Days.Day_4; use Days.Day_4;
+with Days.Day_5; use Days.Day_5;
 with Days.Day_6; use Days.Day_6;
 
 package body Days is
@@ -155,6 +156,45 @@ package body Days is
       Put_Line( "Count of partly overlapping : " & Partly_Overlap'Image );
    end Run_Day_4;
    
+   procedure Run_Day_5( Input_File: String ) is
+      use Containter_Str_P;
+      use Instruction_Str_P;
+      use Crate_Stack_P;
+      use Stacks_Vec_P;
+      Stacks : Stacks_Vec_P.Vector(MAX_STACKS);
+      
+      File: File_Type;
+   begin
+      Initialize_Crate_Stacks(Stacks);
+		Put_Line( "--- Day 5 ---" );
+      Put_Line( "Part 1" );
+      Open( File, In_File, Input_File);
+      while not End_Of_File( File ) loop
+         declare
+            Line : constant Containter_Str_P.Bounded_String := To_Bounded_String(Get_Line( File ));
+         begin
+            if Line /= "" then
+               Process_Crates_Str( Line, Stacks );
+            else
+               exit;
+            end if;
+         end;
+      end loop;
+      Close( File );
+      
+      for I in First_Index( Stacks ) .. Last_Index( Stacks ) loop
+         declare 
+            Crates : constant Crate_Stack_P.Vector := Element( Stacks, I );
+         begin
+            for J in First_Index( Crates ) .. Last_Index( Crates ) loop
+               Put_Line( Element( Crates, J )'Image);
+            end loop;
+         end;
+      end loop;
+                         
+      
+   end Run_Day_5;
+   
    procedure Run_Day_6( Input_File: String ) is
       use Search_Str_P;
       function Get_Search_String( Input_File: String ) return Search_Str_P.Bounded_String is
@@ -181,10 +221,5 @@ package body Days is
       Put_Line( "Part 2" );
       Put_Line( "Idx of Start of Message Marker : " & Message_Idx'Image );
    end Run_Day_6;
-
-    procedure Run_Day_5( Input_File: String ) is
-    begin
-        Put_Line( Input_File );
-    end Run_Day_5;
 
 end Days;
