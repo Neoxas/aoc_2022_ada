@@ -186,6 +186,7 @@ package body Days is
          declare 
             Crates : constant Crate_Stack_P.Vector := Element( Stacks, I );
          begin
+            Put_Line("");
             for J in First_Index( Crates ) .. Last_Index( Crates ) loop
                Put_Line( Element( Crates, J )'Image);
             end loop;
