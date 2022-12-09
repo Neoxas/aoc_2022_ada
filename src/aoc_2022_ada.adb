@@ -15,5 +15,7 @@ begin
         Run_Day_4(Filename);
     elsif Day = "5" then
         Run_Day_5(Filename);
+   elsif Day = "6" then
+      Run_Day_6(Filename);
     end if;
 end Aoc_2022_Ada;

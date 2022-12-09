@@ -4,6 +4,7 @@ with Days.Day_1; use Days.Day_1;
 with Days.Day_2; use Days.Day_2;
 with Days.Day_3; use Days.Day_3;
 with Days.Day_4; use Days.Day_4;
+with Days.Day_6; use Days.Day_6;
 
 package body Days is
     
@@ -153,6 +154,33 @@ package body Days is
       Put_Line( "Part 2" );
       Put_Line( "Count of partly overlapping : " & Partly_Overlap'Image );
    end Run_Day_4;
+   
+   procedure Run_Day_6( Input_File: String ) is
+      use Search_Str_P;
+      function Get_Search_String( Input_File: String ) return Search_Str_P.Bounded_String is
+         File: File_Type;
+         Str: Search_Str_P.Bounded_String;
+      begin
+         Open( File, In_File, Input_File );
+         
+         while not End_Of_File( File ) loop
+            Str := Str & Get_Line( File );
+         end loop;
+         
+         Close(File);
+         return Str;
+      end Get_Search_String;
+
+      Str : constant Search_Str_P.Bounded_String := Get_Search_String( Input_File );
+      Packet_Idx : constant Window_Size_T := Find_First_Non_Overlap( Str, 4 );
+      Message_Idx : constant Window_Size_T := Find_First_Non_Overlap( Str, 14 );
+   begin
+      Put_Line( "--- Day 6 ---" );
+      Put_Line( "Part 1" );
+      Put_Line( "Idx of Start of Packet Marker : " & Packet_Idx'Image );
+      Put_Line( "Part 2" );
+      Put_Line( "Idx of Start of Message Marker : " & Message_Idx'Image );
+   end Run_Day_6;
 
     procedure Run_Day_5( Input_File: String ) is
     begin
