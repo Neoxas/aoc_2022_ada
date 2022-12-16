@@ -1,4 +1,4 @@
-package body Days.Day_8 is
+package body Days.Day_8 with SPARK_Mode is
 
    
 

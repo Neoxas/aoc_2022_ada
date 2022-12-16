@@ -255,10 +255,49 @@ package body Days is
    end Run_Day_6;
    
    procedure Run_Day_8( Input_File: String ) is
+      function Build_Trees( Input_File: String ) return Trees_R is
+         Trees : Trees_R;
+         Tree_Col_Idx : Tree_Col_Idx_T := Tree_Col_Idx_T'First;
+         Tree_Row_Idx : Tree_Row_Idx_T := Tree_Row_Idx_T'First;
+         File: File_Type;
+      begin
+         Open( File, In_File, Input_File);
+         
+         while not End_Of_File( File ) loop
+            Tree_Col_Idx := Tree_Col_Idx_T'First;
+            declare
+               Line: constant String := Get_Line( File );
+            begin
+               for Tree of Line loop
+                  -- Slight hack here to do character to string conversion
+                  Trees.Trees(Tree_Row_Idx)(Tree_Col_Idx) := Tree_T'Value("" & Tree);
+                  Tree_Col_Idx := Tree_Col_Idx + 1;
+               end loop;
+            end;
+            Tree_Row_Idx := Tree_Row_Idx + 1;
+         end loop;
+         
+         Close(File);
+         
+         -- Remove extra addition
+         Trees.Last_Col := Tree_Col_Idx - 1;
+         Trees.Last_Row := Tree_Row_Idx - 1;
+         return Trees;
+      end Build_Trees;
+      
+      Trees: constant Trees_R := Build_Trees( Input_File );
    begin
-      Put_Line( "--- Day 6 ---" );
+      Put_Line( "--- Day 8 ---" );
       Put_Line( "Part 1" );
       Put_Line( Input_File );
+      
+      for Tree_Row_Idx in Trees.Trees'First .. Trees.Last_Row loop
+         for Tree_Col_Idx in Trees.Trees(Tree_Row_Idx)'First .. Trees.Last_Col loop
+            Put( Trees.Trees(Tree_Row_Idx)(Tree_Col_Idx)'Image );
+         end loop;
+         Put_Line("");
+      end loop;
+      
    end Run_Day_8;
 
 end Days;
