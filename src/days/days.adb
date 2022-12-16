@@ -269,8 +269,8 @@ package body Days is
                Line: constant String := Get_Line( File );
             begin
                for Tree of Line loop
-                  -- Slight hack here to do character to string conversion
-                  Trees.Trees(Tree_Row_Idx)(Tree_Col_Idx) := Tree_T'Value("" & Tree);
+                  -- Convert Chr to string by making it an array.
+                  Trees.Trees(Tree_Row_Idx)(Tree_Col_Idx) := Tree_T'Value((1 => Tree));
                   Tree_Col_Idx := Tree_Col_Idx + 1;
                end loop;
             end;
@@ -279,7 +279,7 @@ package body Days is
          
          Close(File);
          
-         -- Remove extra addition
+         -- Remove extra addition of row/col
          Trees.Last_Col := Tree_Col_Idx - 1;
          Trees.Last_Row := Tree_Row_Idx - 1;
          return Trees;
@@ -297,6 +297,21 @@ package body Days is
          end loop;
          Put_Line("");
       end loop;
+
+      declare
+         Test : Tree_Col_Arr := (others => 0);
+      begin
+         Test(1 .. 3) := Trees.Trees(1)(1 .. 3);
+         for I in 1 .. 3 loop
+            Put(Test(I)'Image);
+         end loop;
+         Put_Line("");
+         Test(1..3) := Trees.Trees(1..3)(1);
+         for I in 1 .. 3 loop
+            Put(Test(I)'Image);
+         end loop;
+         Put_Line("");
+      end;
       
    end Run_Day_8;
 
