@@ -286,10 +286,10 @@ package body Days is
       end Build_Trees;
       
       Trees: constant Trees_R := Build_Trees( Input_File );
+      Visible_Trees: constant Natural := Count_Visible_Trees( Trees );
    begin
       Put_Line( "--- Day 8 ---" );
       Put_Line( "Part 1" );
-      Put_Line( Input_File );
       
       for Tree_Row_Idx in Trees.Trees'First(1) .. Trees.Last_Row loop
          for Tree_Col_Idx in Trees.Trees'First(2) .. Trees.Last_Col loop
@@ -298,6 +298,7 @@ package body Days is
          Put_Line("");
       end loop;
       
+      Put_Line( "Number of visible trees: " & Visible_Trees'Image );
    end Run_Day_8;
 
 end Days;

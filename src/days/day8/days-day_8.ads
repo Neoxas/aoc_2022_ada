@@ -13,5 +13,6 @@ package Days.Day_8 with SPARK_Mode is
       Trees: Tree_Arr;
    end record;
    
+   function Count_Visible_Trees( Trees: Trees_R ) return Natural;
 
 end Days.Day_8;
