@@ -1,4 +1,5 @@
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Strings.Fixed;
 with Ada.Containers.Vectors;
 with Days.Day_1; use Days.Day_1;
 with Days.Day_2; use Days.Day_2;
@@ -299,29 +300,39 @@ package body Days is
 
    procedure Run_Day_9( Input_File: String ) is
       use Rope_Inst_Vec_P;
+      use Ada.Strings.Fixed;
       function Get_Rope_Instructions( Input_File: String ) return Rope_Inst_Vec_P.Vector is
-         Inst : Rope_Inst_Vec_P.Vector(MAX_ROPE_INST);
+         Inst_Vec : Rope_Inst_Vec_P.Vector(MAX_ROPE_INST);
          File: File_Type;
       begin
          Open( File, In_File, Input_File);
          
          while not End_Of_File( File ) loop
             declare
-               Line : String := Get_Line( File );
+               Line : constant String := Get_Line( File );
+               -- Find where the string is split
+               Space_Idx : constant Natural := Index( Line, " " );
+               Instruction : constant Rope_Inst_R := (
+                                             Dir => Rope_Dir'Value( Line(Line'First .. Space_Idx ) ),
+                                             Dist => Rope_Dist_T'Value( Line( Space_Idx + 1 .. Line'Last )));
             begin
-               Put_Line( Line );
+               Append( Inst_Vec, Instruction );
             end;
          end loop;
          
          Close(File);
-         return Inst;
+         
+         return Inst_Vec;
       end Get_Rope_Instructions;
       
-      Instructions : Rope_Inst_Vec_P.Vector := Get_Rope_Instructions(Input_File);
-      Visited_Spaces: Natural := Count_Visited_Spaces(Instructions => Instructions);
+      Instructions : constant Rope_Inst_Vec_P.Vector := Get_Rope_Instructions(Input_File);
+      Visited_Spaces: constant Natural := Count_Visited_Spaces(Instructions => Instructions);
    begin
       Put_Line( "--- Day 9 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Visited Spaces: " & Visited_Spaces'Image );
+      for Inst of Instructions loop
+         Put_Line( "Instruction Dir: " & Inst.Dir'Image & ", Dist: " & Inst.Dist'Image );
+      end loop;
    end Run_Day_9;
 end Days;

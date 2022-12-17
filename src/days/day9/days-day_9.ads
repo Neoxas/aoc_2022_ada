@@ -3,15 +3,15 @@ package Days.Day_9 with SPARK_Mode is
    pragma Elaborate_Body;
    MAX_ROPE_INST : constant := 5000;
    -- Head/Tail can be moved either up down left or right
-   type Direction is ( U,D,L,R );
+   type Rope_Dir is ( U,D,L,R );
    -- Distance the Head can be moved
-   subtype Distance_T is Natural range 0 .. 100;
+   subtype Rope_Dist_T is Natural range 0 .. 100;
    -- Range of allowed instructions
    subtype Rope_Inst_Idx_T is Positive range 1 .. MAX_ROPE_INST;
    -- Instruction must be a direction for a distance
    type Rope_Inst_R is record
-      Dir: Direction;
-      Dist: Distance_T;
+      Dir: Rope_Dir;
+      Dist: Rope_Dist_T;
    end record;
    
    -- List of instrutions to move the head around
