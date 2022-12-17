@@ -298,8 +298,30 @@ package body Days is
    end Run_Day_8;
 
    procedure Run_Day_9( Input_File: String ) is
+      use Rope_Inst_Vec_P;
+      function Get_Rope_Instructions( Input_File: String ) return Rope_Inst_Vec_P.Vector is
+         Inst : Rope_Inst_Vec_P.Vector(MAX_ROPE_INST);
+         File: File_Type;
+      begin
+         Open( File, In_File, Input_File);
+         
+         while not End_Of_File( File ) loop
+            declare
+               Line : String := Get_Line( File );
+            begin
+               Put_Line( Line );
+            end;
+         end loop;
+         
+         Close(File);
+         return Inst;
+      end Get_Rope_Instructions;
+      
+      Instructions : Rope_Inst_Vec_P.Vector := Get_Rope_Instructions(Input_File);
+      Visited_Spaces: Natural := Count_Visited_Spaces(Instructions => Instructions);
    begin
       Put_Line( "--- Day 9 ---" );
       Put_Line( "Part 1" );
+      Put_Line( "Visited Spaces: " & Visited_Spaces'Image );
    end Run_Day_9;
 end Days;
