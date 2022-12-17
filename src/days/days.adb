@@ -270,7 +270,7 @@ package body Days is
             begin
                for Tree of Line loop
                   -- Convert Chr to string by making it an array.
-                  Trees.Trees(Tree_Row_Idx)(Tree_Col_Idx) := Tree_T'Value((1 => Tree));
+                  Trees.Trees(Tree_Row_Idx, Tree_Col_Idx) := Tree_T'Value((1 => Tree));
                   Tree_Col_Idx := Tree_Col_Idx + 1;
                end loop;
             end;
@@ -291,27 +291,12 @@ package body Days is
       Put_Line( "Part 1" );
       Put_Line( Input_File );
       
-      for Tree_Row_Idx in Trees.Trees'First .. Trees.Last_Row loop
-         for Tree_Col_Idx in Trees.Trees(Tree_Row_Idx)'First .. Trees.Last_Col loop
-            Put( Trees.Trees(Tree_Row_Idx)(Tree_Col_Idx)'Image );
+      for Tree_Row_Idx in Trees.Trees'First(1) .. Trees.Last_Row loop
+         for Tree_Col_Idx in Trees.Trees'First(2) .. Trees.Last_Col loop
+            Put( Trees.Trees(Tree_Row_Idx, Tree_Col_Idx)'Image );
          end loop;
          Put_Line("");
       end loop;
-
-      declare
-         Test : Tree_Col_Arr := (others => 0);
-      begin
-         Test(1 .. 3) := Trees.Trees(1)(1 .. 3);
-         for I in 1 .. 3 loop
-            Put(Test(I)'Image);
-         end loop;
-         Put_Line("");
-         Test(1..3) := Trees.Trees(1..3)(1);
-         for I in 1 .. 3 loop
-            Put(Test(I)'Image);
-         end loop;
-         Put_Line("");
-      end;
       
    end Run_Day_8;
 

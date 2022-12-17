@@ -5,13 +5,12 @@ package Days.Day_8 with SPARK_Mode is
    subtype Tree_Col_Idx_T is Positive range 1 .. 100;
    
    type Tree_T is range 0 .. 9;
-   type Tree_Col_Arr is array( Tree_Col_Idx_T ) of Tree_T;
-   type Tree_Row_Arr is array( Tree_Row_Idx_T ) of Tree_Col_Arr;
+   type Tree_Arr is array( Tree_Row_Idx_T, Tree_Col_Idx_T ) of Tree_T;
    
    type Trees_R is record
       Last_Col: Tree_Col_Idx_T;
       Last_Row: Tree_Row_Idx_T;
-      Trees: Tree_Row_Arr;
+      Trees: Tree_Arr;
    end record;
    
 
