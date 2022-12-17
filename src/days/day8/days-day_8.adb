@@ -18,6 +18,7 @@ package body Days.Day_8 with SPARK_Mode is
             end if;
          end loop;
       end loop;
+      Tree_Count := Tree_Count + Trees.Last_Col + Trees.Last_Col + Trees.Last_Row + Trees.Last_Row - 4;
       return Tree_Count;
    end Count_Visible_Trees;
 
