@@ -7,6 +7,7 @@ with Days.Day_4; use Days.Day_4;
 with Days.Day_5; use Days.Day_5;
 with Days.Day_6; use Days.Day_6;
 with Days.Day_8; use Days.Day_8;
+with Days.Day_9; use Days.Day_9;
 
 package body Days is
     
@@ -296,4 +297,9 @@ package body Days is
       Put_Line( "Scenic score: " & Scenic_Score'Image );
    end Run_Day_8;
 
+   procedure Run_Day_9( Input_File: String ) is
+   begin
+      Put_Line( "--- Day 9 ---" );
+      Put_Line( "Part 1" );
+   end Run_Day_9;
 end Days;

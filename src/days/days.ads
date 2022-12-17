@@ -12,4 +12,6 @@ package Days is
    procedure Run_Day_6( Input_File: String );
 
    procedure Run_Day_8( Input_File: String );
+
+   procedure Run_Day_9( Input_File: String );
 end Days;
