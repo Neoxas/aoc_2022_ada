@@ -287,18 +287,13 @@ package body Days is
       
       Trees: constant Trees_R := Build_Trees( Input_File );
       Visible_Trees: constant Natural := Count_Visible_Trees( Trees );
+      Scenic_Score: constant Natural := Get_Max_Scenic_Score( Trees );
    begin
       Put_Line( "--- Day 8 ---" );
-      Put_Line( "Part 1" );
-      
-      for Tree_Row_Idx in Trees.Trees'First(1) .. Trees.Last_Row loop
-         for Tree_Col_Idx in Trees.Trees'First(2) .. Trees.Last_Col loop
-            Put( Trees.Trees(Tree_Row_Idx, Tree_Col_Idx)'Image );
-         end loop;
-         Put_Line("");
-      end loop;
-      
+      Put_Line( "Part 1" );    
       Put_Line( "Number of visible trees: " & Visible_Trees'Image );
+      Put_Line( "Part 2" );    
+      Put_Line( "Scenic score: " & Scenic_Score'Image );
    end Run_Day_8;
 
 end Days;

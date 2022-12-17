@@ -15,4 +15,6 @@ package Days.Day_8 with SPARK_Mode is
    
    function Count_Visible_Trees( Trees: Trees_R ) return Natural;
 
+   function Get_Max_Scenic_Score( Trees: Trees_R ) return Natural;
+
 end Days.Day_8;
