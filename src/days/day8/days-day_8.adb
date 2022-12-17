@@ -1,3 +1,4 @@
+with Ada.Text_IO; use Ada.Text_IO;
 package body Days.Day_8 with SPARK_Mode is
    function Is_Row_Visible( Tree: Tree_T; Trees : Tree_Arr; Start_Idx: Tree_Col_Idx_T; End_Idx: Tree_Col_Idx_T; Row_Idx: Tree_Row_Idx_T ) return Boolean is
      (for all J in Start_Idx .. End_Idx => Trees(Row_Idx, J) < Tree);
@@ -27,23 +28,37 @@ package body Days.Day_8 with SPARK_Mode is
       return Tree_Count;
    end Count_Visible_Trees;
    
-   function Count_Row_Trees( Tree: Tree_T; Trees : Tree_Arr; Start_Idx: Tree_Col_Idx_T; End_Idx: Tree_Col_Idx_T; Row_Idx: Tree_Row_Idx_T ) return Natural is
+   function Count_Row_Trees( Tree: Tree_T; Trees : Tree_Arr; Start_Idx: Tree_Col_Idx_T; End_Idx: Tree_Col_Idx_T; Row_Idx: Tree_Row_Idx_T; Left: Boolean ) return Natural is
       Count : Natural := Natural'First;
    begin
-      for I in Start_Idx .. End_Idx loop
-         -- As soon as we see a bigger tree, exit
-         if Trees( Row_Idx, I ) >= Tree then
-            exit;
-         end if;
-         Count := Count + 1;
-      end loop;
-      return Count;
+      if Left then
+         for I in reverse Start_Idx .. End_Idx loop
+            Count := Count + 1;
+            -- As soon as we see a bigger tree, exit
+            if Trees( Row_Idx, I ) >= Tree then
+               exit;
+            end if;
+         
+         end loop;
+         return Count;
+      else
+         for I in Start_Idx .. End_Idx loop
+            Count := Count + 1;
+            -- As soon as we see a bigger tree, exit
+            if Trees( Row_Idx, I ) >= Tree then
+               exit;
+            end if;
+         
+         end loop;
+         return Count;
+      end if;
    end;
 
-   function Count_Col_Trees( Tree: Tree_T; Trees : Tree_Arr; Start_Idx: Tree_Row_Idx_T; End_Idx: Tree_Row_Idx_T; Col_Idx: Tree_Col_Idx_T ) return Natural is
+   function Count_Col_Trees( Tree: Tree_T; Trees : Tree_Arr; Start_Idx: Tree_Row_Idx_T; End_Idx: Tree_Row_Idx_T; Col_Idx: Tree_Col_Idx_T; Up:Boolean ) return Natural is
       Count : Natural := Natural'First;
    begin
-      for I in Start_Idx .. End_Idx loop
+      if Up then
+         for I in reverse Start_Idx .. End_Idx loop
          Count := Count + 1;
          -- As soon as we see a bigger tree, exit
          if Trees( I, Col_Idx ) >= Tree then
@@ -51,6 +66,16 @@ package body Days.Day_8 with SPARK_Mode is
          end if;
       end loop;
       return Count;
+      else
+         for I in Start_Idx .. End_Idx loop
+            Count := Count + 1;
+            -- As soon as we see a bigger tree, exit
+            if Trees( I, Col_Idx ) >= Tree then
+               exit;
+            end if;
+         end loop;
+         return Count;
+      end if;
    end;
    
    function Get_Max_Scenic_Score( Trees: Trees_R ) return Natural is
@@ -60,13 +85,14 @@ package body Days.Day_8 with SPARK_Mode is
       -- Go for inner squares only, as outside edges will have *0 for view
       for I in Trees.Trees'First(1) + 1 .. Trees.Last_Row - 1 loop
          for J in Trees.Trees'First(2) + 1 .. Trees.Last_Col - 1 loop
-            Left := Count_Row_Trees( Trees.Trees(I,J), Trees.Trees, Trees.Trees'First(2), J - 1, I);
-            Right := Count_Row_Trees( Trees.Trees(I,J), Trees.Trees, J + 1, Trees.Last_Col, I);
-            Up := Count_Col_Trees( Trees.Trees(I,J), Trees.Trees, Trees.Trees'First(1), I - 1, J);
-            Down := Count_Col_Trees( Trees.Trees(I,J), Trees.Trees, I + 1, Trees.Last_Row, J);
+            Left := Count_Row_Trees( Trees.Trees(I,J), Trees.Trees, Trees.Trees'First(2), J - 1, I, True);
+            Right := Count_Row_Trees( Trees.Trees(I,J), Trees.Trees, J + 1, Trees.Last_Col, I, False);
+            Up := Count_Col_Trees( Trees.Trees(I,J), Trees.Trees, Trees.Trees'First(1), I - 1, J, True);
+            Down := Count_Col_Trees( Trees.Trees(I,J), Trees.Trees, I + 1, Trees.Last_Row, J, False);
             
             Scenic_Score := Left * Right * Up * Down;
             
+            Put_Line( "Tree: " & Trees.Trees(I,J)'Image & ", Left: " & Left'Image & ", Right: " & Right'Image & ", Up: " & Up'Image & ", Down: " & Down'Image & ", Scenic_Score: " & Scenic_Score'Image);
             if Scenic_Score > Max_Score then
                Max_Score := Scenic_Score;
             end if;
