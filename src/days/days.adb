@@ -255,9 +255,32 @@ package body Days is
    end Run_Day_6;
    
    procedure Run_Day_8( Input_File: String ) is
+      type Test_Arr_T is array( 1 .. 4, 1 .. 3 ) of Character;
+      type B_Arr_T is array( 1 .. 3 ) of Character;
+      type C_Arr_T is array( 1 .. 3 ) of B_Arr_T;
+        Arr : Test_Arr_T := ( ('A','B','C'),
+                              ('D','E','F'),
+                              ('G', 'H', 'I'),
+                              ('J', 'K', 'L'));
+      CAarr : C_Arr_T := ( ('A','B','C'),
+                            ('D','E','F'),
+                           ('G', 'H', 'I'));
+      BArr: B_Arr_T := CAarr( 1 )( 1 .. 3 );
+      DArr : B_Arr_T := CAarr( 1 .. 3 )(1);
    begin
       Put_Line( "--- Day 6 ---" );
       Put_Line( "Part 1" );
+      
+      for B of BArr loop
+         Put( "" & B );
+      end loop;
+      Put_Line("");
+      
+      for D of DArr loop
+         Put( "" & D );
+      end loop;
+      Put_Line("");
+      
       Put_Line( Input_File );
    end Run_Day_8;
 
