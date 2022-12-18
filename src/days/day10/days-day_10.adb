@@ -39,19 +39,21 @@ package body Days.Day_10 with SPARK_Mode is
    end Get_Sum_Of_Value_At_Interesting_Times;
 
    function Get_Crt_Screen( Instructions : Cpu_Inst_Vec_P.Vector; Num_Screen_Lines : Positive ) return Crt_Screen_Arr_T is
-      Crt_Screen : Crt_Screen_Arr_T( 1 .. Num_Screen_Lines ) := ( others => (others => ' ' ) );
+      -- Initialize screen with error values if cell not written.
+      Crt_Screen : Crt_Screen_Arr_T( 1 .. Num_Screen_Lines ) := ( others => (others => 'E' ) );
       Screen_Row_Idx : Positive := Crt_Screen'First;
       Pixel_Idx : Crt_Line_Idx_T := Crt_Line_Idx_T'First;
       Register_Val : Integer := 1;
-      Exec_Time : Cpu_Times_T; 
+      Exec_Time : Cpu_Times_T;
    begin
       for Inst of Instructions loop
          Exec_Time := Cycle_Lookup( Inst.Inst );
          
+         
          -- For however many cycles we require, wait that many loops
          for I in Cpu_Times_T'First .. Exec_Time loop
-            -- Draw Pixel
-            if Pixel_Idx in Register_Val - 1 .. Register_Val + 1 then
+            -- Draw Pixel. If we overlap, add a #, else draw a .
+            if Pixel_Idx - 1 in Register_Val - 1 .. Register_Val + 1 then
                Crt_Screen( Screen_Row_Idx )(Pixel_Idx) := '#';
             else
                Crt_Screen( Screen_Row_Idx )(Pixel_Idx) := '.';
@@ -59,9 +61,6 @@ package body Days.Day_10 with SPARK_Mode is
 
             -- If we on the last pixel, we need to increment our row and reset pixel value
             if (Pixel_Idx = Crt_Line_Idx_T'Last) then
-               if Screen_Row_Idx = Crt_Screen'Last then
-                  exit;
-               end if;
                Screen_Row_Idx := Screen_Row_Idx + 1;
                Pixel_Idx := Crt_Line_Idx_T'First;
             else
