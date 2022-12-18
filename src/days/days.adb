@@ -10,6 +10,7 @@ with Days.Day_6;
 with Days.Day_8;
 with Days.Day_9; 
 with Days.Day_10;
+with Days.Day_11;
 
 package body Days is
     
@@ -388,4 +389,12 @@ package body Days is
          Put_Line( Line );
       end loop;
    end Run_Day_10;
+
+procedure Run_Day_11( Input_File: String ) is
+      use Days.Day_11;
+   begin
+      Put_Line( "--- Day 11 ---" );
+      Put_Line( "Part 1" );
+      Put_Line( Input_File );
+   end Run_Day_11;
 end Days;
