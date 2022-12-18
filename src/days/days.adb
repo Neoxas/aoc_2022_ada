@@ -9,7 +9,7 @@ with Days.Day_5; use Days.Day_5;
 with Days.Day_6; use Days.Day_6;
 with Days.Day_8; use Days.Day_8;
 with Days.Day_9; use Days.Day_9;
-with Days.Day_10; use Days.Day_10;
+with Days.Day_10;
 
 package body Days is
     
@@ -338,8 +338,49 @@ package body Days is
    end Run_Day_9;
 
    procedure Run_Day_10( Input_File: String ) is
+      use Days.Day_10;
+      use Cpu_Inst_Vec_P;
+      use Ada.Strings.Fixed;
+      function Get_Cpu_Instructions( Input_File: String ) return Cpu_Inst_Vec_P.Vector is
+         Vec : Cpu_Inst_Vec_P.Vector(CPU_INST_CAPACITY);
+         File : File_Type;
+      begin
+         Open( File, In_File, Input_File );
+         
+         while not End_Of_File( File ) loop
+            declare
+               Line : constant String := Get_Line( File );
+               Space_Idx : constant Natural := Index( Line, " " );
+               Inst : Cpu_Inst_R;
+            begin
+               if Space_Idx = 0 then
+                  Inst := ( Inst => Noop);
+               else
+                  Inst := ( Inst => Addx,
+                            Value => Integer'Value( Line( Space_Idx + 1 .. Line'Last ) ) );
+               end if;
+               Append( Vec, Inst );
+            end;
+         end loop;
+         
+         Close( File );
+         
+         return Vec;
+      end Get_Cpu_Instructions;
+      
+      Cpu_Insts : constant Cpu_Inst_Vec_P.Vector := Get_Cpu_Instructions( Input_File );
    begin
       Put_Line( "--- Day 10 ---" );
       Put_Line( "Part 1" );
+      
+      for Inst of Cpu_Insts loop
+         Put( "Inst: " & Inst.Inst'Image );
+         case Inst.Inst is
+            when Addx =>
+               Put(", Value: " & Inst.Value'Image );
+            when others => null;
+         end case;
+         Put_Line( "" );
+      end loop;
    end Run_Day_10;
 end Days;
