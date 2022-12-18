@@ -379,9 +379,14 @@ package body Days is
       Cpu_Insts : constant Cpu_Inst_Vec_P.Vector := Get_Cpu_Instructions( Input_File );
       Intersting_Times : constant Intersting_Cycles_Arr_T( 1 .. 6 ) := ( 20, 60,100,140,180,220 );
       Sum_Times: constant Cycle_Time_T := Get_Sum_Of_Value_At_Interesting_Times( Cpu_Insts, Intersting_Times);
+      Crt_Scren : constant Crt_Screen_Arr_T := Get_Crt_Screen( Cpu_Insts, Intersting_Times);
    begin
       Put_Line( "--- Day 10 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Sum of interesting times: " & Sum_Times'Image );
+      Put_Line( "Part 2" );
+      for Line of Crt_Scren loop
+         Put_Line( Line );
+      end loop;
    end Run_Day_10;
 end Days;

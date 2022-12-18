@@ -38,4 +38,9 @@ package body Days.Day_10 with SPARK_Mode is
       return Val_Sum;
    end Get_Sum_Of_Value_At_Interesting_Times;
 
+   function Get_Crt_Screen( Instructions : Cpu_Inst_Vec_P.Vector; Interesting_Times : Intersting_Cycles_Arr_T ) return Crt_Screen_Arr_T is
+      Crt_Screen : Crt_Screen_Arr_T( Interesting_Times'FIrst .. Interesting_Times'Last ) := ( others => (others => ' ' ) );
+   begin
+      return Crt_Screen;
+   end Get_Crt_Screen;
 end Days.Day_10;
