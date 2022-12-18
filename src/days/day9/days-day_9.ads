@@ -18,7 +18,9 @@ package Days.Day_9 with SPARK_Mode is
    package Rope_Inst_Vec_P is new Formal_Vectors( Index_Type => Rope_Inst_Idx_T,
                                                   Element_Type => Rope_Inst_R);
 
-   function Count_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector ) return Natural;
+   function Count_Single_Knot_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector ) return Natural;
+   
+   function Count_X_Knot_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector; Knots: Positive ) return Natural;
    
    private
    -- Allowed grid indexes

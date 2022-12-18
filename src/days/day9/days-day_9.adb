@@ -65,7 +65,7 @@ package body Days.Day_9 with SPARK_Mode is
       end if;
    end Record_Tail_Location;
    
-   function Count_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector ) return Natural is
+   function Count_Single_Knot_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector ) return Natural is
       Grid : Grid_Arr_T := ( others => (others => False) );
       -- Start in the middle of the grid.
       Head : Point_R := (Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2);
@@ -96,6 +96,39 @@ package body Days.Day_9 with SPARK_Mode is
       end loop;
 
       return Count;
-   end Count_Visited_Spaces;
+   end Count_Single_Knot_Visited_Spaces;
+
+   function Count_X_Knot_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector; Knots: Positive ) return Natural is
+      Grid : Grid_Arr_T := ( others => (others => False) );
+      -- Start in the middle of the grid.
+      Head : Point_R := (Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2);
+      Tail : Point_R := (Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2);
+      Count : Natural := 0;
+   begin
+      -- Record start location
+      Record_Tail_Location( Grid, Tail, Count );
+      
+      for Inst of Instructions loop
+         for I in 1 .. Inst.Dist loop
+            -- Move head
+            Move_Point( Head, Inst.Dir );
+            -- Check if we are not touching
+            if not Points_Touching(Head, Tail) then
+
+               -- If we are in the same row or col, follow the direction it went in.
+               if Same_Col( Head, Tail ) or Same_Row( Head, Tail ) then
+                  Move_Point(Tail, Inst.Dir);
+               else
+                  Catch_Diagonal( Head, Tail, Inst.Dir );
+               end if;
+
+               -- Update our tail location
+               Record_Tail_Location( Grid, Tail, Count );
+            end if;
+         end loop;
+      end loop;
+
+      return Count;
+   end Count_X_Knot_Visited_Spaces;
 
 end Days.Day_9;

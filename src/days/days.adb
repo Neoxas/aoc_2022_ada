@@ -326,10 +326,13 @@ package body Days is
       end Get_Rope_Instructions;
       
       Instructions : constant Rope_Inst_Vec_P.Vector := Get_Rope_Instructions(Input_File);
-      Visited_Spaces: constant Natural := Count_Visited_Spaces(Instructions => Instructions);
+      Single_Knot_Visited_Spaces: constant Natural := Count_Single_Knot_Visited_Spaces(Instructions => Instructions);
+      Ten_Knot_Visited_Spaces: constant Natural := Count_X_Knot_Visited_Spaces(Instructions => Instructions, Knots => 10);
    begin
       Put_Line( "--- Day 9 ---" );
       Put_Line( "Part 1" );
-      Put_Line( "Visited Spaces: " & Visited_Spaces'Image );
+      Put_Line( "Single Knot Visited Spaces: " & Single_Knot_Visited_Spaces'Image );
+      Put_Line( "Part 2" );
+      Put_Line( "Ten Knot Visited Spaces: " & Ten_Knot_Visited_Spaces'Image );
    end Run_Day_9;
 end Days;
