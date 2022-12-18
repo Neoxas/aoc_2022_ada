@@ -375,15 +375,5 @@ package body Days is
       Put_Line( "--- Day 10 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Sum of interesting times: " & Sum_Times'Image );
-      
-      for Inst of Cpu_Insts loop
-         Put( "Inst: " & Inst.Inst'Image );
-         case Inst.Inst is
-            when Addx =>
-               Put(", Value: " & Inst.Value'Image );
-            when others => null;
-         end case;
-         Put_Line( "" );
-      end loop;
    end Run_Day_10;
 end Days;
