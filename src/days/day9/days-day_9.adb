@@ -100,31 +100,38 @@ package body Days.Day_9 with SPARK_Mode is
 
    function Count_X_Knot_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector; Knots: Positive ) return Natural is
       Grid : Grid_Arr_T := ( others => (others => False) );
-      -- Start in the middle of the grid.
-      Head : Point_R := (Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2);
-      Tail : Point_R := (Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2);
+      
+      -- Store all the knots we want to track
+      type Knot_Arr_T is array( 1 .. Knots ) of Point_R;
+      Knots_Arr : Knot_Arr_T := ( others => ( Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2) );
+      -- Keep track of first and last array
+      Head renames Knots_Arr(Knots_Arr'First);
+      Tail renames Knots_Arr(Knots_Arr'Last);
+      
       Count : Natural := 0;
    begin
       -- Record start location
-      Record_Tail_Location( Grid, Tail, Count );
+      Record_Tail_Location( Grid, Head, Count );
       
       for Inst of Instructions loop
          for I in 1 .. Inst.Dist loop
             -- Move head
             Move_Point( Head, Inst.Dir );
-            -- Check if we are not touching
-            if not Points_Touching(Head, Tail) then
-
-               -- If we are in the same row or col, follow the direction it went in.
-               if Same_Col( Head, Tail ) or Same_Row( Head, Tail ) then
-                  Move_Point(Tail, Inst.Dir);
-               else
-                  Catch_Diagonal( Head, Tail, Inst.Dir );
+            -- Follow all our knots through.
+            for I in Knots_Arr'First + 1 .. Knots_Arr'Last loop
+               -- Check if we are not touching
+               if not Points_Touching(Knots_Arr(I - 1), Knots_Arr(I)) then
+                  -- If we are in the same row or col, follow the direction it went in.
+                  if Same_Col( Knots_Arr(I - 1), Knots_Arr(I) ) or Same_Row( Knots_Arr(I - 1), Knots_Arr(I) ) then
+                     -- NEED TO UPDATE THIS TO FIND RIGHT DIRECTION FOR TRAILING KNOTS!
+                     Move_Point(Knots_Arr(I), Inst.Dir);
+                  else
+                     Catch_Diagonal( Knots_Arr(I - 1), Knots_Arr(I), Inst.Dir );
+                  end if;
                end if;
-
-               -- Update our tail location
-               Record_Tail_Location( Grid, Tail, Count );
-            end if;
+            end loop;
+            -- Update our tail location
+            Record_Tail_Location( Grid, Tail, Count );
          end loop;
       end loop;
 
