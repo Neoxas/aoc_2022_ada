@@ -331,8 +331,5 @@ package body Days is
       Put_Line( "--- Day 9 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Visited Spaces: " & Visited_Spaces'Image );
-      for Inst of Instructions loop
-         Put_Line( "Instruction Dir: " & Inst.Dir'Image & ", Dist: " & Inst.Dist'Image );
-      end loop;
    end Run_Day_9;
 end Days;

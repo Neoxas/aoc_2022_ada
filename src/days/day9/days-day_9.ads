@@ -22,7 +22,7 @@ package Days.Day_9 with SPARK_Mode is
    
    private
    -- Allowed grid indexes
-   type Grid_Idx_T is range 1 .. 1000;
+   subtype Grid_Idx_T is Integer range 1 .. 1000;
    -- Build a 1000x1000 grid of Booleans, representing if a point has been visited
    type Grid_Arr_T is array(Grid_Idx_T, Grid_Idx_T) of Boolean;
    
