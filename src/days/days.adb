@@ -1,14 +1,14 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Fixed;
 with Ada.Containers.Vectors;
-with Days.Day_1; use Days.Day_1;
-with Days.Day_2; use Days.Day_2;
-with Days.Day_3; use Days.Day_3;
-with Days.Day_4; use Days.Day_4;
-with Days.Day_5; use Days.Day_5;
-with Days.Day_6; use Days.Day_6;
-with Days.Day_8; use Days.Day_8;
-with Days.Day_9; use Days.Day_9;
+with Days.Day_1;
+with Days.Day_2;
+with Days.Day_3;
+with Days.Day_4;
+with Days.Day_5;
+with Days.Day_6;
+with Days.Day_8;
+with Days.Day_9; 
 with Days.Day_10;
 
 package body Days is
@@ -17,6 +17,7 @@ package body Days is
       Ada.Containers.Vectors( Index_Type => Natural, Element_Type => Natural );
 
     procedure Run_Day_1( Input_File: String ) is
+      use Days.Day_1;
         function Get_Calories_From_File( Input_File: String ) return Calories_Arr_T is
             -- Gets a Vector containing each elf with the relevant calories
             -- Each Elf in the input file is seperated by a blank line
@@ -64,6 +65,7 @@ package body Days is
     end Run_Day_1;
     
     procedure Run_Day_2( Input_File: String ) is
+      use Days.Day_2;
         procedure Get_Rounds( Input_File: String; Arr_Len : out Round_Count_T; Matched_Round : out Rounds_T; Predicted_Rounds: out Rounds_T  ) is
             -- TODO: Work out better way of initalizing this
             File : File_Type;
@@ -100,6 +102,7 @@ package body Days is
    end Run_Day_2;
    
    procedure Run_Day_3( Input_File: String ) is
+      use Days.Day_3;
       use Backpacks_P;
       use Contents_Str_P;
       function Get_Backpacks( Input_File: String ) return Backpacks_P.Vector is
@@ -133,6 +136,7 @@ package body Days is
    end Run_Day_3;
    
    procedure Run_Day_4( Input_File: String ) is
+      use Days.Day_4;
       use Cleaning_Str_P;
       use Cleaning_Vec_P;
       
@@ -161,6 +165,7 @@ package body Days is
    end Run_Day_4;
    
    procedure Run_Day_5( Input_File: String ) is
+      use Days.Day_5;
       use Containter_Str_P;
       use Instruction_Str_P;
       use Crate_Stack_P;
@@ -231,6 +236,7 @@ package body Days is
    end Run_Day_5;
    
    procedure Run_Day_6( Input_File: String ) is
+      use Days.Day_6;
       use Search_Str_P;
       function Get_Search_String( Input_File: String ) return Search_Str_P.Bounded_String is
          File: File_Type;
@@ -258,6 +264,7 @@ package body Days is
    end Run_Day_6;
    
    procedure Run_Day_8( Input_File: String ) is
+      use Days.Day_8;
       function Build_Trees( Input_File: String ) return Trees_R is
          Trees : Trees_R;
          Tree_Col_Idx : Tree_Col_Idx_T := Tree_Col_Idx_T'First;
@@ -300,6 +307,7 @@ package body Days is
    end Run_Day_8;
 
    procedure Run_Day_9( Input_File: String ) is
+      use Days.Day_9;
       use Rope_Inst_Vec_P;
       use Ada.Strings.Fixed;
       function Get_Rope_Instructions( Input_File: String ) return Rope_Inst_Vec_P.Vector is
