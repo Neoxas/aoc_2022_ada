@@ -13,11 +13,10 @@ with Days.Day_10;
 
 package body Days is
     
-    package Nat_Vec is new
-      Ada.Containers.Vectors( Index_Type => Natural, Element_Type => Natural );
-
     procedure Run_Day_1( Input_File: String ) is
       use Days.Day_1;
+      package Nat_Vec is new
+        Ada.Containers.Vectors( Index_Type => Natural, Element_Type => Natural );
         function Get_Calories_From_File( Input_File: String ) return Calories_Arr_T is
             -- Gets a Vector containing each elf with the relevant calories
             -- Each Elf in the input file is seperated by a blank line
