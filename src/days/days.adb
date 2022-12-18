@@ -9,6 +9,7 @@ with Days.Day_5; use Days.Day_5;
 with Days.Day_6; use Days.Day_6;
 with Days.Day_8; use Days.Day_8;
 with Days.Day_9; use Days.Day_9;
+with Days.Day_10; use Days.Day_10;
 
 package body Days is
     
@@ -335,4 +336,10 @@ package body Days is
       Put_Line( "Part 2" );
       Put_Line( "Ten Knot Visited Spaces: " & Ten_Knot_Visited_Spaces'Image );
    end Run_Day_9;
+
+   procedure Run_Day_10( Input_File: String ) is
+   begin
+      Put_Line( "--- Day 10 ---" );
+      Put_Line( "Part 1" );
+   end Run_Day_10;
 end Days;
