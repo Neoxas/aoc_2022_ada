@@ -50,23 +50,22 @@ package body Days.Day_10 with SPARK_Mode is
          
          -- For however many cycles we require, wait that many loops
          for I in Cpu_Times_T'First .. Exec_Time loop
-            -- If we on the last pixel, we need to increment our row and reset pixel value
-            if (Pixel_Idx = Crt_Line_Idx_T'Last) then
-               if Screen_Row_Idx = Crt_Screen'Last then
-                  exit;
-               end if;
-               
-               Screen_Row_Idx := Screen_Row_Idx + 1;
-               Pixel_Idx := Crt_Line_Idx_T'First;
-            else
-               Pixel_Idx := Pixel_Idx + 1;
-            end if;
-            
             -- Draw Pixel
             if Pixel_Idx in Register_Val - 1 .. Register_Val + 1 then
                Crt_Screen( Screen_Row_Idx )(Pixel_Idx) := '#';
             else
                Crt_Screen( Screen_Row_Idx )(Pixel_Idx) := '.';
+            end if;
+
+            -- If we on the last pixel, we need to increment our row and reset pixel value
+            if (Pixel_Idx = Crt_Line_Idx_T'Last) then
+               if Screen_Row_Idx = Crt_Screen'Last then
+                  exit;
+               end if;
+               Screen_Row_Idx := Screen_Row_Idx + 1;
+               Pixel_Idx := Crt_Line_Idx_T'First;
+            else
+               Pixel_Idx := Pixel_Idx + 1;
             end if;
          end loop;
          
