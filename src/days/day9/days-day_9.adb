@@ -1,4 +1,6 @@
 package body Days.Day_9 with SPARK_Mode is
+   Matching_Idx: exception;
+   
    function Same_Col( Head: Point_R; Tail: Point_R) return Boolean is
      ( Head.Col_Idx = Tail.Col_Idx );
    
@@ -31,28 +33,46 @@ package body Days.Day_9 with SPARK_Mode is
             Point.Col_Idx := Point.Col_Idx - 1;
       end case;
    end Move_Point;
-   
+
+   function Up_Or_Down( Head: Point_R; Tail: Point_R) return Rope_Dir
+     with Pre => (Head.Row_Idx /= Tail.Row_Idx) is
+   begin
+      -- If the head is less than the tail, its below so move down. Else move up.
+      if Head.Row_Idx < Tail.Row_Idx then
+            return D;
+      elsif Head.Row_Idx > Tail.Row_Idx then
+         return U;
+      else
+         -- Make a null return
+         raise Matching_Idx;
+      end if;
+   end Up_Or_Down;
+
+   function Left_Or_Right( Head: Point_R; Tail: Point_R) return Rope_Dir
+     with Pre => (Head.Col_Idx /= Tail.Col_Idx) is
+   begin
+      -- If head is less, its to the left. Else its to the right.
+      if Head.Col_Idx < Tail.Col_Idx then
+            return L;
+      elsif Head.Col_Idx > Tail.Col_Idx then
+            return R;
+      else
+         -- Make a null return
+         raise Matching_Idx;
+      end if;
+   end Left_Or_Right;
+
    procedure Catch_Diagonal( Head: Point_R; Tail: in out Point_R; Dir: Rope_Dir ) is
    begin
       -- Move in the direction the head moved
       Move_Point( Tail, Dir );
       -- If we moved up or down, then we need to move in the column to follow
-      if Dir in U | D then
-         -- If head is less, its to the left. Else its to the right.
-         if Head.Col_Idx < Tail.Col_Idx then
-            Move_Point( Tail, L );
-         elsif Head.Col_Idx > Tail.Col_Idx then
-            Move_Point( Tail, R );
-         end if;
-         
       -- Else if we moved left or right we need to move the row to follow
+      if Dir in U | D then
+         Move_Point( Tail, Left_Or_Right( Head, Tail ));
+      
       elsif Dir in L | R then
-         -- If the head is less than the tail, its below so move down. Else move up.
-         if Head.Row_Idx < Tail.Row_Idx then
-            Move_Point( Tail, D );
-         elsif Head.Row_Idx > Tail.Row_Idx then
-            Move_Point( Tail, U );
-         end if;
+         Move_Point( Tail, Up_Or_Down( Head, Tail ));
       end if;
    end Catch_Diagonal;
    
@@ -97,6 +117,9 @@ package body Days.Day_9 with SPARK_Mode is
 
       return Count;
    end Count_Single_Knot_Visited_Spaces;
+   
+
+     
 
    function Count_X_Knot_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector; Knots: Positive ) return Natural is
       Grid : Grid_Arr_T := ( others => (others => False) );
