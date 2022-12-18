@@ -40,7 +40,7 @@ package body Days.Day_10 with SPARK_Mode is
 
    function Get_Crt_Screen( Instructions : Cpu_Inst_Vec_P.Vector; Num_Screen_Lines : Positive ) return Crt_Screen_Arr_T is
       Crt_Screen : Crt_Screen_Arr_T( 1 .. Num_Screen_Lines ) := ( others => (others => ' ' ) );
-      Screen_Row_Idx : Cpu_Times_T := Crt_Screen'First;
+      Screen_Row_Idx : Positive := Crt_Screen'First;
       Pixel_Idx : Crt_Line_Idx_T := Crt_Line_Idx_T'First;
       Register_Val : Integer := 1;
       Exec_Time : Cpu_Times_T; 
@@ -52,7 +52,6 @@ package body Days.Day_10 with SPARK_Mode is
          for I in Cpu_Times_T'First .. Exec_Time loop
             -- If we on the last pixel, we need to increment our row and reset pixel value
             if (Pixel_Idx = Crt_Line_Idx_T'Last) then
-
                if Screen_Row_Idx = Crt_Screen'Last then
                   exit;
                end if;
