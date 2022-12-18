@@ -67,8 +67,9 @@ package body Days.Day_9 with SPARK_Mode is
    
    function Count_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector ) return Natural is
       Grid : Grid_Arr_T := ( others => (others => False) );
-      Head : Point_R := (Row_Idx => Grid_Idx_T'First, Col_Idx => Grid_Idx_T'First);
-      Tail : Point_R := (Row_Idx => Grid_Idx_T'First, Col_Idx => Grid_Idx_T'First);
+      -- Start in the middle of the grid.
+      Head : Point_R := (Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2);
+      Tail : Point_R := (Row_Idx => Grid_Idx_T'Last / 2, Col_Idx => Grid_Idx_T'Last / 2);
       Count : Natural := 0;
    begin
       -- Record start location
