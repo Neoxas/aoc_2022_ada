@@ -62,10 +62,21 @@ package body Days.Day_9 with SPARK_Mode is
       end if;
    end Left_Or_Right;
 
-   procedure Catch_Diagonal( Head: Point_R; Tail: in out Point_R; Dir: Rope_Dir ) is
+   procedure Catch_Diagonal( Head: Point_R; Tail: in out Point_R) is
+      Abs_Col_Dist : constant Integer := abs( Col_Dist( Head, Tail ) );
+      Abs_Row_Dist : constant Integer := abs( Row_Dist( Head, Tail ) );
+      Dir: Rope_Dir;
    begin
-      -- Move in the direction the head moved
-      Move_Point( Tail, Dir );
+      -- If col distance is bigger, we need to move in that direction first for diagonal.
+      if Abs_Col_Dist > Abs_Row_Dist then
+         Dir := Left_Or_Right( Head, Tail );
+         -- Move in the direction the head moved
+         Move_Point( Tail, Dir );
+      else
+         Dir := Up_Or_Down( Head, Tail );
+         Move_Point( Tail, Dir );
+      end if;
+      
       -- If we moved up or down, then we need to move in the column to follow
       -- Else if we moved left or right we need to move the row to follow
       if Dir in U | D then
@@ -106,7 +117,7 @@ package body Days.Day_9 with SPARK_Mode is
                if Same_Col( Head, Tail ) or Same_Row( Head, Tail ) then
                   Move_Point(Tail, Inst.Dir);
                else
-                  Catch_Diagonal( Head, Tail, Inst.Dir );
+                  Catch_Diagonal(Head, Tail);
                end if;
 
                -- Update our tail location
@@ -118,8 +129,6 @@ package body Days.Day_9 with SPARK_Mode is
       return Count;
    end Count_Single_Knot_Visited_Spaces;
    
-
-     
 
    function Count_X_Knot_Visited_Spaces( Instructions: Rope_Inst_Vec_P.Vector; Knots: Positive ) return Natural is
       Grid : Grid_Arr_T := ( others => (others => False) );
@@ -144,12 +153,15 @@ package body Days.Day_9 with SPARK_Mode is
             for I in Knots_Arr'First + 1 .. Knots_Arr'Last loop
                -- Check if we are not touching
                if not Points_Touching(Knots_Arr(I - 1), Knots_Arr(I)) then
-                  -- If we are in the same row or col, follow the direction it went in.
-                  if Same_Col( Knots_Arr(I - 1), Knots_Arr(I) ) or Same_Row( Knots_Arr(I - 1), Knots_Arr(I) ) then
-                     -- NEED TO UPDATE THIS TO FIND RIGHT DIRECTION FOR TRAILING KNOTS!
-                     Move_Point(Knots_Arr(I), Inst.Dir);
+                  -- if we are in the same col, we need to follow it up or down
+                  -- elsif we are in the same row, we need to follow it left or right
+                  -- else we need to follow the diagonal.
+                  if Same_Col( Knots_Arr(I - 1), Knots_Arr(I) ) then
+                     Move_Point(Knots_Arr(I), Up_Or_Down(Knots_Arr(I - 1), Knots_Arr(I)));
+                  elsif Same_Row( Knots_Arr(I - 1), Knots_Arr(I) ) then
+                     Move_Point(Knots_Arr(I), Left_Or_Right(Knots_Arr(I - 1), Knots_Arr(I)));
                   else
-                     Catch_Diagonal( Knots_Arr(I - 1), Knots_Arr(I), Inst.Dir );
+                     Catch_Diagonal( Knots_Arr(I - 1), Knots_Arr(I));
                   end if;
                end if;
             end loop;
