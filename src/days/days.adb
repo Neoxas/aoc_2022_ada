@@ -393,19 +393,37 @@ package body Days is
 
 procedure Run_Day_11( Input_File: String ) is
       use Days.Day_11;
+      use Monkey_Map_P;
       use Utilities;
       function Get_Monkeys( Input_File: String ) return Monkey_Map_P.Map is
          File : File_Type;
+         -- TODO: Lookup modulus
          Monkeys : Monkey_Map_P.Map( 20, 92821 );
+         function Process_Monkey( File: in out File_Type ) return Monkey_R is
+            Items : Monkey_Item_Vec_P.Vector(MONKEY_ITEM_CAP);
+            Item_Op: Worry_Op_R;
+            Division: Integer;
+            Pass_Monkey : Monkey_ID_T;
+            Fail_Monkey : Monkey_ID_T;
+         begin
+            return (Items => Items, 
+                    Item_Op => Item_Op, 
+                    Div_Test => Division, 
+                    Pass_Monkey => Pass_Monkey, 
+                    Fail_Monkey => Fail_Monkey);
+         end Process_Monkey;
       begin
          Open( File, In_File, Input_File );
-         Skip_Line( File );
+         
          declare 
             Split_Str: constant Split_Str_Arr := Split_String( Get_Line( File ), " " );
+            Monkey_ID_Str : Split_Str_P.Bounded_String := Split_Str( Split_Str'Last );
+            
+            -- TODO: Look at how to use trim here
+            Monkey_ID : Monkey_ID_T := Monkey_ID_T'Value( Split_Str_P.To_String( 
+                                                          SPlit_Str_P.Bounded_Slice( Monkey_ID_Str, 1 , Split_Str_P.Length( Monkey_ID_Str ) - 1 ) ) );
          begin
-            for Line of Split_Str loop
-               Put_Line( Split_Str_P.To_String( Line ) );
-            end loop;
+            Insert( Monkeys, Monkey_ID, Process_Monkey( File ));
          end;
 
          Close( File );
