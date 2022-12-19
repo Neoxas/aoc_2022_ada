@@ -1,6 +1,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Fixed;
 with Ada.Containers.Vectors;
+with Utilities;
 with Days.Day_1;
 with Days.Day_2;
 with Days.Day_3;
@@ -392,7 +393,26 @@ package body Days is
 
 procedure Run_Day_11( Input_File: String ) is
       use Days.Day_11;
-      Monkeys : Monkey_Map_P.Map( 20, 92821 );
+      use Utilities;
+      function Get_Monkeys( Input_File: String ) return Monkey_Map_P.Map is
+         File : File_Type;
+         Monkeys : Monkey_Map_P.Map( 20, 92821 );
+      begin
+         Open( File, In_File, Input_File );
+         Skip_Line( File );
+         declare 
+            Split_Str: constant Split_Str_Arr := Split_String( Get_Line( File ), " " );
+         begin
+            for Line of Split_Str loop
+               Put_Line( Split_Str_P.To_String( Line ) );
+            end loop;
+         end;
+
+         Close( File );
+         return Monkeys;
+      end Get_Monkeys;
+
+      Monkeys : constant Monkey_Map_P.Map := Get_Monkeys( Input_File );
       Monkey_Buisness: constant Natural := Get_Monkey_Buisness_Level( Monkeys => Monkeys, Rounds => 20 );
    begin
       Put_Line( "--- Day 11 ---" );
