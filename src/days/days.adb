@@ -2,6 +2,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Fixed;
 with Ada.Containers.Vectors;
 with Ada.Strings;
+with Ada.Strings.Bounded;
 with Ada.Strings.Maps;
 with Ada.Strings.Maps.Constants;
 with Utilities;
@@ -397,22 +398,23 @@ package body Days is
 procedure Run_Day_11( Input_File: String ) is
       use Days.Day_11;
       use Ada.Strings;
+      use Ada.Strings.Bounded;
       use Ada.Strings.Maps;
       use Ada.Strings.Maps.Constants;
       use Monkey_Map_P;
       use Monkey_Item_Vec_P;
       use Utilities;
+      use Utilities.Split_Str_P;
       function Get_Monkeys( Input_File: String ) return Monkey_Map_P.Map is
          File : File_Type;
          -- TODO: Lookup modulus
          Monkeys : Monkey_Map_P.Map( 20, 92821 );
          function Trim_File_Line( File: in out File_Type ) return String is
-            Str : String := Split_Str_P.To_String( 
-                                                   Split_Str_P.Trim( 
-                                                     Source => Split_Str_P.To_Bounded_String(Get_Line( File )),
-                                                     Side => Both));
          begin
-            return Str;
+            return Split_Str_P.To_String( 
+                                          Split_Str_P.Trim( 
+                                            Source => Split_Str_P.To_Bounded_String(Get_Line( File )),
+                                            Side => Both));
          end Trim_File_Line;
          
          function Trim_To_Number( Str: Split_Str_P.Bounded_String ) return Split_Str_P.Bounded_String is
@@ -445,21 +447,36 @@ procedure Run_Day_11( Input_File: String ) is
             end Process_Items;
             
             function Process_Worry_Op( Worry_Str: String ) return Worry_Op_R is
+               function Get_Worry_Type( Str: Split_Str_P.Bounded_String ) return Worry_Side_R is
+               begin
+                  if Str = "old" then
+                  return (Side_Type => Old);
+               else
+                  return (Side_Type => Value, Side_Val => Natural'Value( To_String(Trim_To_Number( Str ))));
+               end if;
+               end Get_Worry_Type;
+
+               Worry_Split: constant Split_Str_Arr := Split_String( Worry_Str, " " );
+               LHS_Str: constant Bounded_String := Trim(Worry_Split( 3 ), Both);
+               Op_Str: constant Bounded_String := Trim(Worry_Split( 4 ), Both);
+               RHS_Str: constant Bounded_String := Trim(Worry_Split( 5 ), Both);
                Worry_Op : Worry_Op_R;
             begin
+               Put_Line( To_String(LHS_Str) & "," & To_String(Op_Str) & "," & To_String(RHS_Str) );
+               Worry_Op.LHS_Type := Get_Worry_Type( LHS_Str );
+               Worry_Op.Operator := Monkey_Op_E'Value( Split_Str_P.To_String( Op_Str ));
+               Worry_Op.RHS_Type := Get_Worry_Type( RHS_Str );
                return Worry_Op;
             end Process_Worry_Op;
-            -- The only entry in this is a singel number so trim to that.
+            
             function Process_Div( Div_Str: String ) return Positive is
-               Trimmed_Str : String := Split_Str_P.To_String( Trim_To_Number( Div_Str ) );
             begin
-               return Positive'Value( Trimmed_Str );
+               return Positive'Value( Split_Str_P.To_String( Trim_To_Number( Div_Str ) ) );
             end Process_Div;
 
             function Process_Result_Monkey( Throw_Str: String ) return Monkey_ID_T is
-               Monkey_Id : Monkey_ID_T;
             begin
-               return Monkey_Id;
+               return Monkey_ID_T'Value(Split_Str_P.To_String( Trim_To_Number( Throw_Str ) ));
             end Process_Result_Monkey;
 
             Items : constant Monkey_Item_Vec_P.Vector := Process_Items( Trim_File_Line( File ) );
@@ -495,6 +512,10 @@ procedure Run_Day_11( Input_File: String ) is
       Put_Line( "--- Day 11 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Level of monkey buisness: " & Monkey_Buisness'Image );
-      Put_Line( Input_File );
+
+      Put_Line( "" );
+      for Monkey of Monkeys loop
+         Put_Line( "Monkey" & Element( Monkeys, Monkey ).Div_Test'Image );
+      end loop;
    end Run_Day_11;
 end Days;

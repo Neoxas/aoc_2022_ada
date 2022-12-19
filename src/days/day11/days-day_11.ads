@@ -25,7 +25,7 @@ package Days.Day_11 with SPARK_Mode is
       case Side_Type is
          when Old => null;
          when Value =>
-            Side_Val: Integer;
+            Side_Val: Natural;
       end case;
    end record;
    
