@@ -460,8 +460,8 @@ procedure Run_Day_11( Input_File: String ) is
                RHS_Str: constant Bounded_String := Trim(Worry_Split( 5 ), Both);
                Worry_Op : Worry_Op_R;
             begin
-               Put_Line( To_String(LHS_Str) & "," & To_String(Op_Str) & "," & To_String(RHS_Str) );
                Worry_Op.LHS_Type := Get_Worry_Type( LHS_Str );
+               -- Convert To character, then back to a string to make to enum
                Worry_Op.Operator := Monkey_Op_E'Value( ( Element(Op_Str, 1)'Image ));
                Worry_Op.RHS_Type := Get_Worry_Type( RHS_Str );
                return Worry_Op;
@@ -493,12 +493,18 @@ procedure Run_Day_11( Input_File: String ) is
       begin
          Open( File, In_File, Input_File );
          
-         declare 
-            -- Trim down to just the ID number
-            Monkey_ID : constant Monkey_ID_T := Monkey_ID_T'Value( Split_Str_P.To_String( Trim_To_Number( Trim_File_Line( File ) ) ) );
-         begin
-            Insert( Monkeys, Monkey_ID, Process_Monkey( File ));
-         end;
+         while not End_Of_File( File )loop
+            declare 
+               -- Trim down to just the ID number
+               Monkey_ID : constant Monkey_ID_T := Monkey_ID_T'Value( Split_Str_P.To_String( Trim_To_Number( Trim_File_Line( File ) ) ) );
+            begin
+               Insert( Monkeys, Monkey_ID, Process_Monkey( File ));
+            end;
+            
+            if not End_Of_File( File ) then
+               Skip_Line( File );
+            end if;
+         end loop;
 
          Close( File );
          return Monkeys;
