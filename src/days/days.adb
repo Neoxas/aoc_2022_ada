@@ -16,6 +16,7 @@ with Days.Day_8;
 with Days.Day_9; 
 with Days.Day_10;
 with Days.Day_11;
+with Days.Day_12;
 
 package body Days is
     
@@ -395,7 +396,7 @@ package body Days is
       end loop;
    end Run_Day_10;
 
-procedure Run_Day_11( Input_File: String ) is
+   procedure Run_Day_11( Input_File: String ) is
       use Days.Day_11;
       use Ada.Strings;
       use Ada.Strings.Maps;
@@ -523,4 +524,11 @@ procedure Run_Day_11( Input_File: String ) is
       Put_Line( "Part 2" );
       Put_Line( "Level of monkey buisness without relief: " & Monkey_Buisness_2'Image );
    end Run_Day_11;
+   
+   procedure Run_Day_12( Input_File: String ) is
+      use Day_12;
+   begin
+      Put_Line( "--- Day 12 ---" );
+      Put_Line( "Part 1" );
+   end Run_Day_12;
 end Days;
