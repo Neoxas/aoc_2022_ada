@@ -414,6 +414,18 @@ procedure Run_Day_11( Input_File: String ) is
          begin
             return Str;
          end Trim_File_Line;
+         
+         function Trim_To_Number( Str: Split_Str_P.Bounded_String ) return Split_Str_P.Bounded_String is
+         begin
+            return Split_Str_P.Trim( Source => Str,
+                                     Left => not Decimal_Digit_Set,
+                                     Right => not Decimal_Digit_Set );
+         end Trim_To_Number;
+
+         function Trim_To_Number( Str: String ) return Split_Str_P.Bounded_String is
+         begin
+            return Trim_To_Number( Split_Str_P.To_Bounded_String( Str ) );
+         end Trim_To_Number;
 
          function Process_Monkey( File: in out File_Type ) return Monkey_R is
 
@@ -424,22 +436,37 @@ procedure Run_Day_11( Input_File: String ) is
                -- Skip first two elements in string
                for Item_Idx in Split_Str'First + 2 .. Split_Str'Last loop
                   declare
-                     Trimmed : constant Split_Str_P.Bounded_String := Split_Str_P.Trim( Source => Split_Str( Item_Idx ), 
-                                                                               Left =>  To_Set(" :,"), 
-                                                                               Right => To_Set(" :,"));
+                     Trimmed : constant Split_Str_P.Bounded_String := Trim_To_Number( Split_Str( Item_Idx ) );
                   begin
-                     Put_Line( Split_Str_P.To_String( Trimmed ) );
                      Append( Items, Item_Worry_Level_T'Value( Split_Str_P.To_String(Trimmed)) );
                   end;
                end loop;
                return Items;
             end Process_Items;
+            
+            function Process_Worry_Op( Worry_Str: String ) return Worry_Op_R is
+               Worry_Op : Worry_Op_R;
+            begin
+               return Worry_Op;
+            end Process_Worry_Op;
+            -- The only entry in this is a singel number so trim to that.
+            function Process_Div( Div_Str: String ) return Positive is
+               Trimmed_Str : String := Split_Str_P.To_String( Trim_To_Number( Div_Str ) );
+            begin
+               return Positive'Value( Trimmed_Str );
+            end Process_Div;
 
-            Items : Monkey_Item_Vec_P.Vector := Process_Items( Trim_File_Line( File ) );
-            Item_Op: Worry_Op_R;
-            Division: Integer;
-            Pass_Monkey : Monkey_ID_T;
-            Fail_Monkey : Monkey_ID_T;
+            function Process_Result_Monkey( Throw_Str: String ) return Monkey_ID_T is
+               Monkey_Id : Monkey_ID_T;
+            begin
+               return Monkey_Id;
+            end Process_Result_Monkey;
+
+            Items : constant Monkey_Item_Vec_P.Vector := Process_Items( Trim_File_Line( File ) );
+            Item_Op: constant Worry_Op_R := Process_Worry_Op( Trim_File_Line( File ) );
+            Division: constant Positive := Process_Div( Trim_File_Line( File ) );
+            Pass_Monkey : constant Monkey_ID_T := Process_Result_Monkey( Trim_File_Line( File ) );
+            Fail_Monkey : constant Monkey_ID_T := Process_Result_Monkey( Trim_File_Line( File ) );
          begin
 
             return (Items => Items, 
@@ -452,16 +479,8 @@ procedure Run_Day_11( Input_File: String ) is
          Open( File, In_File, Input_File );
          
          declare 
-            Split_Str: constant Split_Str_Arr := Split_String( Trim_File_Line( File ), " " );
-            Monkey_ID_Str : constant Split_Str_P.Bounded_String := Split_Str( Split_Str'Last );
-            
-            -- TODO: Look at how to use trim here
-            Monkey_ID : constant Monkey_ID_T := Monkey_ID_T'Value( Split_Str_P.To_String( 
-                                                                   Split_Str_P.Trim( 
-                                                                     Source => Monkey_ID_Str, 
-                                                                     Left => To_Set( " ,:" ),
-                                                                     Right => To_Set( " ,:" ))
-                                                                  ));
+            -- Trim down to just the ID number
+            Monkey_ID : constant Monkey_ID_T := Monkey_ID_T'Value( Split_Str_P.To_String( Trim_To_Number( Trim_File_Line( File ) ) ) );
          begin
             Insert( Monkeys, Monkey_ID, Process_Monkey( File ));
          end;

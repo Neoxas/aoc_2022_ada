@@ -47,7 +47,7 @@ package Days.Day_11 with SPARK_Mode is
       -- Operatition it applies to worry level
       Item_Op: Worry_Op_R;
       -- Its test for each worry level
-      Div_Test: Integer;
+      Div_Test: Positive;
       -- Monkey ID to throw to on Pass/Fail
       Pass_Monkey : Monkey_ID_T;
       Fail_Monkey: Monkey_ID_T;
