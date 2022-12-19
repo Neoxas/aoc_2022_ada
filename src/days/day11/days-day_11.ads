@@ -11,7 +11,7 @@ package Days.Day_11 with SPARK_Mode is
    type Monkey_Item_Idx_T is range 1 .. MONKEY_ITEM_CAP;
    
    -- Define a fixed range for the allowed worry level of an item
-   type Item_Worry_Level_T is range 0 .. 100_000;
+   type Item_Worry_Level_T is range 0 .. 1_000_000_000;
    
    -- Max of up to 20 monkeys
    type Monkey_ID_T is range 0 .. MONKEY_CAP;
@@ -27,7 +27,7 @@ package Days.Day_11 with SPARK_Mode is
       case Side_Type is
          when Old => null;
          when Value =>
-            Side_Val: Natural;
+            Side_Val: Item_Worry_Level_T;
       end case;
    end record;
    
@@ -53,6 +53,7 @@ package Days.Day_11 with SPARK_Mode is
       -- Monkey ID to throw to on Pass/Fail
       Pass_Monkey : Monkey_ID_T;
       Fail_Monkey: Monkey_ID_T;
+      Items_Inspected: Natural := 0;
    end record;
    
    -- Hash method for Monkey ID type

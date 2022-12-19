@@ -450,7 +450,7 @@ procedure Run_Day_11( Input_File: String ) is
                   if Str = "old" then
                   return (Side_Type => Old);
                else
-                  return (Side_Type => Value, Side_Val => Natural'Value( To_String(Trim_To_Number( Str ))));
+                  return (Side_Type => Value, Side_Val => Item_Worry_Level_T'Value( To_String(Trim_To_Number( Str ))));
                end if;
                end Get_Worry_Type;
 
@@ -488,7 +488,8 @@ procedure Run_Day_11( Input_File: String ) is
                     Item_Op => Item_Op, 
                     Div_Test => Division, 
                     Pass_Monkey => Pass_Monkey, 
-                    Fail_Monkey => Fail_Monkey);
+                    Fail_Monkey => Fail_Monkey,
+                    Items_Inspected => 0);
          end Process_Monkey;
       begin
          Open( File, In_File, Input_File );
@@ -516,10 +517,5 @@ procedure Run_Day_11( Input_File: String ) is
       Put_Line( "--- Day 11 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Level of monkey buisness: " & Monkey_Buisness'Image );
-
-      Put_Line( "" );
-      for Monkey of Monkeys loop
-         Put_Line( "Monkey" & Element( Monkeys, Monkey ).Div_Test'Image );
-      end loop;
    end Run_Day_11;
 end Days;
