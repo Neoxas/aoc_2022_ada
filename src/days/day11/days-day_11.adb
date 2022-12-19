@@ -1,6 +1,12 @@
+with Ada.Text_IO; use ADa.Text_IO;
 package body Days.Day_11 with SPARK_Mode is
    use Monkey_Map_P;
    use Monkey_Item_Vec_P;
+
+   function Convert_String_To_Worry( Str: String ) return Item_Worry_Level_T is
+   begin
+      return From_String( Str );
+   end;
 
    procedure Do_Monkey_Operation( Item: Item_Worry_Level_T; Monkey: in out Monkey_R; Monkeys: in out Monkey_Map_P.Map) is
       function Get_Side_Value( Item: Item_Worry_Level_T; Side: Worry_Side_R ) return Item_Worry_Level_T is
@@ -16,6 +22,7 @@ package body Days.Day_11 with SPARK_Mode is
       Tmp_LHS : constant Item_Worry_Level_T := Get_Side_Value(Item_Copy, Monkey.Item_Op.LHS_Type);
       Tmp_RHS : constant Item_Worry_Level_T := Get_Side_Value(Item_Copy, Monkey.Item_Op.RHS_Type);
    begin
+      Put_Line( "Operation :" & Tmp_LHS'Image & Monkey.Item_Op.Operator'Image & Tmp_RHS'Image );
       -- Monkey goes through each item. Inspects it. Adjusts worry level by operator and then div 3 round down.
       case Monkey.Item_Op.Operator is
          when '*' => 
@@ -26,10 +33,10 @@ package body Days.Day_11 with SPARK_Mode is
             Item_Copy := Tmp_LHS - Tmp_RHS;
       end case;
       
-      Item_Copy := Item_Copy / 3;
+      -- Item_Copy := Item_Copy / 3;
 
       -- Tests and throws to relevant monkey.
-      if Integer(Item_Copy) mod Integer(Monkey.Div_Test) = 0 then
+      if Item_Copy mod Monkey.Div_Test = 0 then
          declare
             Pass_Monkey: Monkey_R := Element( Monkeys, Monkey.Pass_Monkey );
          begin

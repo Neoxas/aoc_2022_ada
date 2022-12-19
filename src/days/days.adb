@@ -4,6 +4,7 @@ with Ada.Containers.Vectors;
 with Ada.Strings;
 with Ada.Strings.Maps;
 with Ada.Strings.Maps.Constants;
+with Ada.Numerics.Big_Numbers.Big_Integers;
 with Utilities;
 with Days.Day_1;
 with Days.Day_2;
@@ -403,6 +404,7 @@ procedure Run_Day_11( Input_File: String ) is
       use Monkey_Item_Vec_P;
       use Utilities;
       use Utilities.Split_Str_P;
+      use Ada.Numerics.Big_Numbers.Big_Integers;
       function Get_Monkeys( Input_File: String ) return Monkey_Map_P.Map is
          File : File_Type;
          -- TODO: Lookup modulus
@@ -438,7 +440,7 @@ procedure Run_Day_11( Input_File: String ) is
                   declare
                      Trimmed : constant Split_Str_P.Bounded_String := Trim_To_Number( Split_Str( Item_Idx ) );
                   begin
-                     Append( Items, Item_Worry_Level_T'Value( Split_Str_P.To_String(Trimmed)) );
+                     Append( Items, Convert_String_To_Worry( Split_Str_P.To_String(Trimmed)) );
                   end;
                end loop;
                return Items;
@@ -450,7 +452,7 @@ procedure Run_Day_11( Input_File: String ) is
                   if Str = "old" then
                   return (Side_Type => Old);
                else
-                  return (Side_Type => Value, Side_Val => Item_Worry_Level_T'Value( To_String(Trim_To_Number( Str ))));
+                  return (Side_Type => Value, Side_Val => Convert_String_To_Worry( To_String(Trim_To_Number( Str ))));
                end if;
                end Get_Worry_Type;
 
@@ -467,9 +469,9 @@ procedure Run_Day_11( Input_File: String ) is
                return Worry_Op;
             end Process_Worry_Op;
             
-            function Process_Div( Div_Str: String ) return Positive is
+            function Process_Div( Div_Str: String ) return Big_Positive is
             begin
-               return Positive'Value( Split_Str_P.To_String( Trim_To_Number( Div_Str ) ) );
+               return From_String( Split_Str_P.To_String( Trim_To_Number( Div_Str ) ) );
             end Process_Div;
 
             function Process_Result_Monkey( Throw_Str: String ) return Monkey_ID_T is
@@ -479,7 +481,7 @@ procedure Run_Day_11( Input_File: String ) is
 
             Items : constant Monkey_Item_Vec_P.Vector := Process_Items( Trim_File_Line( File ) );
             Item_Op: constant Worry_Op_R := Process_Worry_Op( Trim_File_Line( File ) );
-            Division: constant Positive := Process_Div( Trim_File_Line( File ) );
+            Division: constant Big_Positive := Process_Div( Trim_File_Line( File ) );
             Pass_Monkey : constant Monkey_ID_T := Process_Result_Monkey( Trim_File_Line( File ) );
             Fail_Monkey : constant Monkey_ID_T := Process_Result_Monkey( Trim_File_Line( File ) );
          begin
@@ -512,7 +514,7 @@ procedure Run_Day_11( Input_File: String ) is
       end Get_Monkeys;
 
       Monkeys : constant Monkey_Map_P.Map := Get_Monkeys( Input_File );
-      Monkey_Buisness: constant Natural := Get_Monkey_Buisness_Level( Monkeys => Monkeys, Rounds => 20 );
+      Monkey_Buisness: constant Natural := Get_Monkey_Buisness_Level( Monkeys => Monkeys, Rounds => 10000 );
    begin
       Put_Line( "--- Day 11 ---" );
       Put_Line( "Part 1" );

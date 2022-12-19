@@ -1,8 +1,10 @@
 with Ada.Containers.Formal_Vectors;
 with Ada.Containers.Formal_Hashed_Maps;
+with Ada.Numerics.Big_Numbers.Big_Integers;
 
 package Days.Day_11 with SPARK_Mode is
    use Ada.Containers;
+   use Ada.Numerics.Big_Numbers.Big_Integers;
    
    -- Max number of items a monkey can hold
    MONKEY_ITEM_CAP : constant := 20;
@@ -11,7 +13,7 @@ package Days.Day_11 with SPARK_Mode is
    type Monkey_Item_Idx_T is range 1 .. MONKEY_ITEM_CAP;
    
    -- Define a fixed range for the allowed worry level of an item
-   type Item_Worry_Level_T is range 0 .. 1_000_000_000;
+   subtype Item_Worry_Level_T is Big_Natural;
    
    -- Max of up to 20 monkeys
    type Monkey_ID_T is range 0 .. MONKEY_CAP;
@@ -49,7 +51,7 @@ package Days.Day_11 with SPARK_Mode is
       -- Operatition it applies to worry level
       Item_Op: Worry_Op_R;
       -- Its test for each worry level
-      Div_Test: Positive;
+      Div_Test: Big_Natural;
       -- Monkey ID to throw to on Pass/Fail
       Pass_Monkey : Monkey_ID_T;
       Fail_Monkey: Monkey_ID_T;
@@ -64,6 +66,7 @@ package Days.Day_11 with SPARK_Mode is
    package Monkey_Map_P is new Formal_Hashed_Maps( Key_Type => Monkey_ID_T,
                                                    Element_Type => Monkey_R,
                                                    Hash => Monkey_ID_Hash);
+   function Convert_String_To_Worry( Str: String ) return Item_Worry_Level_T;
    
    function Get_Monkey_Buisness_Level( Monkeys: Monkey_Map_P.Map; Rounds: Positive ) return Natural;
 end Days.Day_11;
