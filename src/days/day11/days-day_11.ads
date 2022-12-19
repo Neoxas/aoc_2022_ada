@@ -6,13 +6,15 @@ package Days.Day_11 with SPARK_Mode is
    
    -- Max number of items a monkey can hold
    MONKEY_ITEM_CAP : constant := 20;
+   MONKEY_CAP : constant := 20;
+   
    type Monkey_Item_Idx_T is range 1 .. MONKEY_ITEM_CAP;
    
    -- Define a fixed range for the allowed worry level of an item
    type Item_Worry_Level_T is range 0 .. 100_000;
    
    -- Max of up to 20 monkeys
-   type Monkey_ID_T is range 0 .. 20;
+   type Monkey_ID_T is range 0 .. MONKEY_CAP;
    
    -- Operations the monkey can perform on worry level
    type Monkey_Op_E is ('*','+','-');

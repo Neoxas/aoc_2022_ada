@@ -2,7 +2,6 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Fixed;
 with Ada.Containers.Vectors;
 with Ada.Strings;
-with Ada.Strings.Bounded;
 with Ada.Strings.Maps;
 with Ada.Strings.Maps.Constants;
 with Utilities;
@@ -398,7 +397,6 @@ package body Days is
 procedure Run_Day_11( Input_File: String ) is
       use Days.Day_11;
       use Ada.Strings;
-      use Ada.Strings.Bounded;
       use Ada.Strings.Maps;
       use Ada.Strings.Maps.Constants;
       use Monkey_Map_P;
@@ -408,7 +406,7 @@ procedure Run_Day_11( Input_File: String ) is
       function Get_Monkeys( Input_File: String ) return Monkey_Map_P.Map is
          File : File_Type;
          -- TODO: Lookup modulus
-         Monkeys : Monkey_Map_P.Map( 20, 92821 );
+         Monkeys : Monkey_Map_P.Map( MONKEY_CAP, 92821 );
          function Trim_File_Line( File: in out File_Type ) return String is
          begin
             return Split_Str_P.To_String( 
@@ -464,7 +462,7 @@ procedure Run_Day_11( Input_File: String ) is
             begin
                Put_Line( To_String(LHS_Str) & "," & To_String(Op_Str) & "," & To_String(RHS_Str) );
                Worry_Op.LHS_Type := Get_Worry_Type( LHS_Str );
-               Worry_Op.Operator := Monkey_Op_E'Value( Split_Str_P.To_String( Op_Str ));
+               Worry_Op.Operator := Monkey_Op_E'Value( ( Element(Op_Str, 1)'Image ));
                Worry_Op.RHS_Type := Get_Worry_Type( RHS_Str );
                return Worry_Op;
             end Process_Worry_Op;
