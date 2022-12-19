@@ -1,4 +1,4 @@
-with Ada.Text_IO; use ADa.Text_IO;
+-- with Ada.Text_IO; use ADa.Text_IO;
 package body Days.Day_11 with SPARK_Mode is
    use Monkey_Map_P;
    use Monkey_Item_Vec_P;
@@ -8,7 +8,7 @@ package body Days.Day_11 with SPARK_Mode is
       return From_String( Str );
    end;
 
-   procedure Do_Monkey_Operation( Item: Item_Worry_Level_T; Monkey: in out Monkey_R; Monkeys: in out Monkey_Map_P.Map) is
+   procedure Do_Monkey_Operation( Item: Item_Worry_Level_T; Monkey: in out Monkey_R; Monkeys: in out Monkey_Map_P.Map; Relief: Boolean) is
       function Get_Side_Value( Item: Item_Worry_Level_T; Side: Worry_Side_R ) return Item_Worry_Level_T is
       begin
          case Side.Side_Type is
@@ -22,7 +22,7 @@ package body Days.Day_11 with SPARK_Mode is
       Tmp_LHS : constant Item_Worry_Level_T := Get_Side_Value(Item_Copy, Monkey.Item_Op.LHS_Type);
       Tmp_RHS : constant Item_Worry_Level_T := Get_Side_Value(Item_Copy, Monkey.Item_Op.RHS_Type);
    begin
-      Put_Line( "Operation :" & Tmp_LHS'Image & Monkey.Item_Op.Operator'Image & Tmp_RHS'Image );
+      -- Put_Line( "Operation :" & Tmp_LHS'Image & Monkey.Item_Op.Operator'Image & Tmp_RHS'Image );
       -- Monkey goes through each item. Inspects it. Adjusts worry level by operator and then div 3 round down.
       case Monkey.Item_Op.Operator is
          when '*' => 
@@ -33,7 +33,9 @@ package body Days.Day_11 with SPARK_Mode is
             Item_Copy := Tmp_LHS - Tmp_RHS;
       end case;
       
-      -- Item_Copy := Item_Copy / 3;
+      if Relief then
+         Item_Copy := Item_Copy / 3;
+      end if;
 
       -- Tests and throws to relevant monkey.
       if Item_Copy mod Monkey.Div_Test = 0 then
@@ -57,7 +59,7 @@ package body Days.Day_11 with SPARK_Mode is
       Monkey.Items_Inspected := Monkey.Items_Inspected + 1;
    end Do_Monkey_Operation;
    
-   function Get_Monkey_Buisness_Level( Monkeys : Monkey_Map_P.Map; Rounds: Positive ) return Natural is
+   function Get_Monkey_Buisness_Level( Monkeys : Monkey_Map_P.Map; Rounds: Positive; Relief: Boolean ) return Natural is
       -- Copy to allow us to adjust entries as we go through rounds
       M_Copy : Monkey_Map_P.Map := Monkeys;
       Inspect_Max_1, Inspect_Max_2 : Natural := 0;
@@ -72,7 +74,7 @@ package body Days.Day_11 with SPARK_Mode is
                -- Inspect each item for each monkey
                for Item of Monkey.Items loop
                   -- Do operations on worry levels and throw to other monkeys.
-                  Do_Monkey_Operation( Item, Monkey, M_Copy);
+                  Do_Monkey_Operation( Item, Monkey, M_Copy, Relief);
                end loop;
                -- Monkey has thrown all its items so it should be empty
                Clear( Monkey.Items );

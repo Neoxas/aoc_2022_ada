@@ -68,5 +68,5 @@ package Days.Day_11 with SPARK_Mode is
                                                    Hash => Monkey_ID_Hash);
    function Convert_String_To_Worry( Str: String ) return Item_Worry_Level_T;
    
-   function Get_Monkey_Buisness_Level( Monkeys: Monkey_Map_P.Map; Rounds: Positive ) return Natural;
+   function Get_Monkey_Buisness_Level( Monkeys: Monkey_Map_P.Map; Rounds: Positive; Relief: Boolean) return Natural;
 end Days.Day_11;

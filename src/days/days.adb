@@ -514,10 +514,13 @@ procedure Run_Day_11( Input_File: String ) is
       end Get_Monkeys;
 
       Monkeys : constant Monkey_Map_P.Map := Get_Monkeys( Input_File );
-      Monkey_Buisness: constant Natural := Get_Monkey_Buisness_Level( Monkeys => Monkeys, Rounds => 10000 );
+      Monkey_Buisness_1: constant Natural := Get_Monkey_Buisness_Level( Monkeys => Monkeys, Rounds => 20, Relief => True );
+      Monkey_Buisness_2: constant Natural := Get_Monkey_Buisness_Level( Monkeys => Monkeys, Rounds => 10000, Relief => False );
    begin
       Put_Line( "--- Day 11 ---" );
       Put_Line( "Part 1" );
-      Put_Line( "Level of monkey buisness: " & Monkey_Buisness'Image );
+      Put_Line( "Level of monkey buisness with relief: " & Monkey_Buisness_1'Image );
+      Put_Line( "Part 2" );
+      Put_Line( "Level of monkey buisness without relief: " & Monkey_Buisness_2'Image );
    end Run_Day_11;
 end Days;
