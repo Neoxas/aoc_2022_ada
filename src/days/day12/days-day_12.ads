@@ -1,4 +1,4 @@
-package Days.Day_12 is
+package Days.Day_12 with SPARK_Mode is
    pragma Elaborate_Body;
    
 
