@@ -529,24 +529,38 @@ package body Days is
       use Day_12;
       use Utilities;
       function Get_Map( Input_File: String ) return Map_Arr is
-         FS : File_Structure_R := Get_File_Structure( Input_File );
+         FS : constant File_Structure_R := Get_File_Structure( Input_File );
          File : File_Type;
-         Map: Map_Arr( 1 .. 10, 1 .. 10);
+         Map: Map_Arr( Map_Idx'First .. Map_Idx(FS.Num_Lines), Map_Idx'First .. Map_Idx(FS.Line_Length));
+         Row_Idx : Map_Idx := Map_Idx'First;
       begin
          Open( File, In_File, Input_File );
-         Put_Line( "Line length: " & FS.Line_Length'Image );
-         Put_Line( "Num lines: " & FS.Num_Lines'Image );
-         --while not End_Of_FIle( File ) loop
-            
-         --end loop;
+
+         while not End_Of_FIle( File ) loop
+            declare
+               Line: constant String := Get_Line( File );
+            begin
+               for I in Line'First .. Line'Last loop
+                  Map( Row_Idx, Map_Idx(I) ) := Line( I );
+               end loop;
+            end;
+            Row_Idx := Row_Idx + 1;
+         end loop;
 
          Close(File);
+
          return Map;
       end Get_Map;
       
-      Map: Map_Arr := Get_Map( Input_File );
+      Map: constant Map_Arr := Get_Map( Input_File );
    begin
       Put_Line( "--- Day 12 ---" );
       Put_Line( "Part 1" );
+      for Row_Idx in Map'Range( 1 ) loop
+         for Col_Idx in Map'Range( 2 ) loop
+            Put( Map( Row_Idx, Col_Idx )'Image );
+         end loop;
+         Put_Line( "" );
+      end loop;
    end Run_Day_12;
 end Days;
