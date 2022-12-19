@@ -392,9 +392,12 @@ package body Days is
 
 procedure Run_Day_11( Input_File: String ) is
       use Days.Day_11;
+      Monkeys : Monkey_Map_P.Map( 20, 92821 );
+      Monkey_Buisness: constant Natural := Get_Monkey_Buisness_Level( Monkeys => Monkeys, Rounds => 20 );
    begin
       Put_Line( "--- Day 11 ---" );
       Put_Line( "Part 1" );
+      Put_Line( "Level of monkey buisness: " & Monkey_Buisness'Image );
       Put_Line( Input_File );
    end Run_Day_11;
 end Days;
