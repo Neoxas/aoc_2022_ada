@@ -406,15 +406,25 @@ procedure Run_Day_11( Input_File: String ) is
          File : File_Type;
          -- TODO: Lookup modulus
          Monkeys : Monkey_Map_P.Map( 20, 92821 );
+         function Trim_File_Line( File: in out File_Type ) return String is
+            Str : String := Split_Str_P.To_String( 
+                                                   Split_Str_P.Trim( 
+                                                     Source => Split_Str_P.To_Bounded_String(Get_Line( File )),
+                                                     Side => Both));
+         begin
+            return Str;
+         end Trim_File_Line;
+
          function Process_Monkey( File: in out File_Type ) return Monkey_R is
 
             function Process_Items( Items_Str: String ) return Monkey_Item_Vec_P.Vector is
                Split_Str: constant Split_Str_Arr := Split_String( Items_Str, " " );
                Items : Monkey_Item_Vec_P.Vector(MONKEY_ITEM_CAP);
             begin
+               -- Skip first two elements in string
                for Item_Idx in Split_Str'First + 2 .. Split_Str'Last loop
                   declare
-                     Trimmed : Split_Str_P.Bounded_String := Split_Str_P.Trim( Source => Split_Str( Item_Idx ), 
+                     Trimmed : constant Split_Str_P.Bounded_String := Split_Str_P.Trim( Source => Split_Str( Item_Idx ), 
                                                                                Left =>  To_Set(" :,"), 
                                                                                Right => To_Set(" :,"));
                   begin
@@ -425,7 +435,7 @@ procedure Run_Day_11( Input_File: String ) is
                return Items;
             end Process_Items;
 
-            Items : Monkey_Item_Vec_P.Vector := Process_Items( Get_Line(File) );
+            Items : Monkey_Item_Vec_P.Vector := Process_Items( Trim_File_Line( File ) );
             Item_Op: Worry_Op_R;
             Division: Integer;
             Pass_Monkey : Monkey_ID_T;
@@ -442,22 +452,16 @@ procedure Run_Day_11( Input_File: String ) is
          Open( File, In_File, Input_File );
          
          declare 
-            Split_Str: constant Split_Str_Arr := Split_String( 
-                                                               Split_Str_P.To_String( 
-                                                                 Split_Str_P.Trim( 
-                                                                   Source => Split_Str_P.To_Bounded_String(Get_Line( File )),
-                                                                   Side => Both)),
-                                                               " " );
+            Split_Str: constant Split_Str_Arr := Split_String( Trim_File_Line( File ), " " );
             Monkey_ID_Str : constant Split_Str_P.Bounded_String := Split_Str( Split_Str'Last );
             
             -- TODO: Look at how to use trim here
             Monkey_ID : constant Monkey_ID_T := Monkey_ID_T'Value( Split_Str_P.To_String( 
-                                                                   SPlit_Str_P.Bounded_Slice( 
-                                                                     Monkey_ID_Str, 
-                                                                     1 , 
-                                                                     Split_Str_P.Length( Monkey_ID_Str ) - 1 ) 
-                                                                  ) 
-                                                                  );
+                                                                   Split_Str_P.Trim( 
+                                                                     Source => Monkey_ID_Str, 
+                                                                     Left => To_Set( " ,:" ),
+                                                                     Right => To_Set( " ,:" ))
+                                                                  ));
          begin
             Insert( Monkeys, Monkey_ID, Process_Monkey( File ));
          end;
