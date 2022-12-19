@@ -2,14 +2,14 @@ with "config/aoc_2022_ada_config.gpr";
 
 project Aoc_2022_Ada is
 
-   for Source_Dirs use ("src/days/day8/", "src/days/day4/", "src/days/day3/", "src/**", "config");
+   for Source_Dirs use ("src/days/day8", "src/days/day4", "src/days/day3", "src/**", "config");
    for Object_Dir use "obj/" & Aoc_2022_Ada_Config.Build_Profile;
    for Create_Missing_Dirs use "True";
    for Exec_Dir use "bin";
    for Main use ("aoc_2022_ada.adb");
 
    package Compiler is
-      for Default_Switches ("ada") use ("-Og", "-ffunction-sections", "-fdata-sections", "-g", "-gnat2020", "-gnatVa", "-gnatwa.X", "-gnatyM794");
+      for Default_Switches ("ada") use ("-Og", "-ffunction-sections", "-fdata-sections", "-g", "-gnat2020", "-gnatVa", "-gnatwa.XJ", "-gnatyM794");
    end Compiler;
 
    package Binder is
