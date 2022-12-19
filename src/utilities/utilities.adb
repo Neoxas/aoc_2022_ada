@@ -1,5 +1,6 @@
 with Ada.Command_Line;
 with Ada.Strings.Search;
+with Ada.Text_IO; use Ada.Text_IO;
 package body Utilities is
    use Ada.Strings.Search;
 
@@ -53,4 +54,25 @@ package body Utilities is
       
       return Arr;
    end;
+   
+   function Get_File_Structure( Input_File: String ) return File_Structure_R is
+      File: File_Type;
+      FS : File_Structure_R := (Line_Length => 1, Num_Lines => 1);
+   begin
+      Open( File, In_File, Input_File );
+      
+      declare
+         Str : constant String := Get_Line( File );
+      begin
+         FS.Line_Length := Str'Last;
+      end;
+      
+      while not End_Of_File( File ) loop
+         Skip_Line( File );
+         FS.Num_Lines := FS.Num_Lines + 1;
+      end loop;
+      
+      Close( File );
+      return FS;
+   end Get_File_Structure;
 end Utilities;

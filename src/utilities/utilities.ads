@@ -9,4 +9,10 @@ package Utilities is
 
    function Split_String( Str: String; Pattern: String ) return Split_Str_Arr;
 
+   type File_Structure_R is record
+      Line_Length : Positive;
+      Num_Lines : Positive;
+   end record;
+   function Get_File_Structure( Input_File: String ) return File_Structure_R;
+
 end Utilities;

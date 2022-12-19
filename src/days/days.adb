@@ -527,6 +527,24 @@ package body Days is
    
    procedure Run_Day_12( Input_File: String ) is
       use Day_12;
+      use Utilities;
+      function Get_Map( Input_File: String ) return Map_Arr is
+         FS : File_Structure_R := Get_File_Structure( Input_File );
+         File : File_Type;
+         Map: Map_Arr( 1 .. 10, 1 .. 10);
+      begin
+         Open( File, In_File, Input_File );
+         Put_Line( "Line length: " & FS.Line_Length'Image );
+         Put_Line( "Num lines: " & FS.Num_Lines'Image );
+         --while not End_Of_FIle( File ) loop
+            
+         --end loop;
+
+         Close(File);
+         return Map;
+      end Get_Map;
+      
+      Map: Map_Arr := Get_Map( Input_File );
    begin
       Put_Line( "--- Day 12 ---" );
       Put_Line( "Part 1" );
