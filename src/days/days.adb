@@ -528,20 +528,21 @@ package body Days is
    procedure Run_Day_12( Input_File: String ) is
       use Day_12;
       use Utilities;
-      function Get_Map( Input_File: String ) return Map_Arr is
+      function Get_Map( Input_File: String ) return Map_Arr_T is
          FS : constant File_Structure_R := Get_File_Structure( Input_File );
          File : File_Type;
-         Map: Map_Arr( Map_Idx'First .. Map_Idx(FS.Num_Lines), Map_Idx'First .. Map_Idx(FS.Line_Length));
-         Row_Idx : Map_Idx := Map_Idx'First;
+         Map: Map_Arr_T( Map_Idx_T'First .. Map_Idx_T(FS.Num_Lines),
+                         Map_Idx_T'First .. Map_Idx_T(FS.Line_Length));
+         Row_Idx : Map_Idx_T := Map_Idx_T'First;
       begin
          Open( File, In_File, Input_File );
 
-         while not End_Of_FIle( File ) loop
+         while not End_Of_File( File ) loop
             declare
                Line: constant String := Get_Line( File );
             begin
                for I in Line'First .. Line'Last loop
-                  Map( Row_Idx, Map_Idx(I) ) := Line( I );
+                  Map( Row_Idx, Map_Idx_T(I) ) := Line( I );
                end loop;
             end;
             Row_Idx := Row_Idx + 1;
@@ -551,16 +552,25 @@ package body Days is
 
          return Map;
       end Get_Map;
+      function Get_Coord_Location( Coord: Character; Map: Map_Arr_T ) return Map_Coord_R is
+      begin
+         for I in Map'Range( 1 ) loop
+            for J in Map'Range( 2 ) loop
+               if Map( I, J ) = Coord then
+                  return (Row => Map_Idx_T(I), Col => Map_Idx_T(J));
+               end if;
+            end loop;
+         end loop;
+         return ( Row => Map_Idx_T'First, Col => Map_Idx_T'First);
+      end Get_Coord_Location;
       
-      Map: constant Map_Arr := Get_Map( Input_File );
+      Map: constant Map_Arr_T := Get_Map( Input_File );
+      Start_Coord : constant Map_Coord_R := Get_Coord_Location( 'S', Map );
+      End_Coord : constant Map_Coord_R := Get_Coord_Location( 'E', Map );
+      Steps: constant Natural := Minimum_Step_Path( Start_Loc => Start_Coord, End_Loc => End_Coord, Map => Map );
    begin
       Put_Line( "--- Day 12 ---" );
       Put_Line( "Part 1" );
-      for Row_Idx in Map'Range( 1 ) loop
-         for Col_Idx in Map'Range( 2 ) loop
-            Put( Map( Row_Idx, Col_Idx )'Image );
-         end loop;
-         Put_Line( "" );
-      end loop;
+      Put_Line( "Minimum steps to end: " & Steps'Image );
    end Run_Day_12;
 end Days;
