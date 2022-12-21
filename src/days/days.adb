@@ -563,14 +563,27 @@ package body Days is
          end loop;
          return ( Row => Map_Idx_T'First, Col => Map_Idx_T'First);
       end Get_Coord_Location;
-      
-      Map: constant Map_Arr_T := Get_Map( Input_File );
+      Map: Map_Arr_T := Get_Map( Input_File );
       Start_Coord : constant Map_Coord_R := Get_Coord_Location( 'S', Map );
       End_Coord : constant Map_Coord_R := Get_Coord_Location( 'E', Map );
-      Steps: constant Natural := Minimum_Step_Path( Start_Loc => Start_Coord, End_Loc => End_Coord, Map => Map );
+      Steps: Natural;
    begin
       Put_Line( "--- Day 12 ---" );
       Put_Line( "Part 1" );
+      
+      -- Jank remappiung
+      for I in Map'Range(1) loop
+         for J in Map'Range(2) loop
+            if Map( I, J ) = 'S' then
+               Map( I, J ) := 'a';
+            end if;
+            if Map( I, J ) = 'E' then
+               Map( I, J ) := 'z';
+            end if;
+         end loop;
+      end loop;
+
+      Steps := Minimum_Step_Path( Start_Loc => Start_Coord, End_Loc => End_Coord, Map => Map );
       Put_Line( "Minimum steps to end: " & Steps'Image );
    end Run_Day_12;
 end Days;
