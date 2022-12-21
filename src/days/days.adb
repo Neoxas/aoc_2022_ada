@@ -552,6 +552,7 @@ package body Days is
 
          return Map;
       end Get_Map;
+      
       function Get_Coord_Location( Coord: Character; Map: Map_Arr_T ) return Map_Coord_R is
       begin
          for I in Map'Range( 1 ) loop
@@ -563,10 +564,12 @@ package body Days is
          end loop;
          return ( Row => Map_Idx_T'First, Col => Map_Idx_T'First);
       end Get_Coord_Location;
+
       Map: Map_Arr_T := Get_Map( Input_File );
       Start_Coord : constant Map_Coord_R := Get_Coord_Location( 'S', Map );
       End_Coord : constant Map_Coord_R := Get_Coord_Location( 'E', Map );
       Steps: Natural;
+      Hiking_Steps: Natural;
    begin
       Put_Line( "--- Day 12 ---" );
       Put_Line( "Part 1" );
