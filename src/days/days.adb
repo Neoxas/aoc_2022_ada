@@ -17,6 +17,7 @@ with Days.Day_9;
 with Days.Day_10;
 with Days.Day_11;
 with Days.Day_12;
+with Days.Day_13;
 
 package body Days is
     
@@ -603,4 +604,12 @@ package body Days is
       
       Put_Line( "Minimum hiking path steps: " & Hiking_Steps'Image );
    end Run_Day_12;
+
+   procedure Run_Day_13( Input_File: String ) is
+      use Days.Day_13;
+   begin
+      Put_Line( "--- Day 13 ---" );
+      Put_Line( "Part 1" );
+   end Run_Day_13;
+
 end Days;
