@@ -606,7 +606,28 @@ package body Days is
    end Run_Day_12;
 
    procedure Run_Day_13( Input_File: String ) is
+      use Ada.Containers;
       use Days.Day_13;
+      use Signal_Vec_P;
+
+      function Get_Signal_List( Input_File: String ) return Signal_Vec_P.Vector is
+         File: File_Type;
+         Signals : Signal_Vec_P.Vector(Count_Type(Signal_Idx_T'Last));
+         Line_Count: Positive := 1;
+      begin
+         Open( File, In_File, Input_File );
+         
+         while not End_Of_File( File ) loop
+            declare
+               Line: String := Get_Line( File );
+            begin
+               Put_Line( Line );
+            end;
+         end loop;
+
+         Close(File);
+         return Signals;
+      end Get_Signal_List;
    begin
       Put_Line( "--- Day 13 ---" );
       Put_Line( "Part 1" );
