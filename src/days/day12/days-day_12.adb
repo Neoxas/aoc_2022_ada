@@ -36,7 +36,7 @@ package body Days.Day_12 with SPARK_Mode is
    begin
       -- if we can go left, set it.
       if Coord.Col /= Map'First(2) then
-         Left := Map( Coord.Row, Coord.Col - 1 ) in Character'Pred( Curr_Coord ) .. Character'Succ( Curr_Coord );
+         Left := Map( Coord.Row, Coord.Col - 1 ) in 'a' .. Character'Succ( Curr_Coord );
          if Left then
             Count := Count + 1;
          end if;
@@ -44,7 +44,7 @@ package body Days.Day_12 with SPARK_Mode is
       
       -- If we can go right, then set the value
       if Coord.Col /= Map'Last(2) then
-         Right := Map( Coord.Row, Coord.Col + 1 ) in Character'Pred( Curr_Coord ) .. Character'Succ( Curr_Coord );
+         Right := Map( Coord.Row, Coord.Col + 1 ) in 'a' .. Character'Succ( Curr_Coord );
          if Right then
             Count := Count + 1;
          end if;
@@ -53,7 +53,7 @@ package body Days.Day_12 with SPARK_Mode is
       -- If we can go Up, then set it
       if Coord.Row /= Map'First(1) then
          -- Cant go Up so not set.
-         Up := Map( Coord.Row - 1, Coord.Col ) in Character'Pred( Curr_Coord ) .. Character'Succ( Curr_Coord );
+         Up := Map( Coord.Row - 1, Coord.Col ) in 'a' .. Character'Succ( Curr_Coord );
          if Up then
             Count := Count + 1;
          end if;
@@ -62,7 +62,7 @@ package body Days.Day_12 with SPARK_Mode is
       -- If we can go down, then set it
       if Coord.Row /= Map'Last(1) then
          -- Cant go down so not set
-         Down := Map( Coord.Row + 1, Coord.Col ) in Character'Pred( Curr_Coord ) .. Character'Succ( Curr_Coord );
+         Down := Map( Coord.Row + 1, Coord.Col ) in 'a' .. Character'Succ( Curr_Coord );
          if Down then
             Count := Count + 1;
          end if;
@@ -175,6 +175,25 @@ package body Days.Day_12 with SPARK_Mode is
       
       Dykstra( Start_Loc, Map, Queue, Visited );
       
+      declare
+         Visited_Map : Map_Arr_T( Map'First(1) .. Map'Last(1), Map'First(2) .. Map'Last(2)) := ( others => ( others => '.' ) );
+      begin
+
+         for Coord of Visited loop
+            Visited_Map( Coord.Row, Coord.Col ) := 'X';
+         end loop;
+         
+         Visited_Map( Start_Loc.Row, Start_Loc.Col ) := 'S';
+         Visited_Map( End_Loc.Row, End_Loc.Col ) := 'E';
+
+         for I in Visited_Map'Range( 1 ) loop
+            for J in Visited_Map'Range( 2 ) loop
+               Put( Visited_Map(I, J)'Image );
+            end loop;
+            Put_Line( "" );
+         end loop;
+      end;
+
       return Element( Visited, End_Loc );
       -- We want to go through every coordinate and add it to the Queue. We want to set all the length parameters to max.
       -- We then want to take the start node and remove it from the queue
