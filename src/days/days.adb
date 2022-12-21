@@ -609,28 +609,58 @@ package body Days is
       use Ada.Containers;
       use Days.Day_13;
       use Signal_Vec_P;
+      use Signals_P;
+      use All_Signals_P;
 
-      function Get_Signal_List( Input_File: String ) return Signal_Vec_P.Vector is
+      function Get_Signal_List( Input_File: String ) return All_Signals_P.Vector is
+         function Process_Signals_Line( Line: String ) return Signal_Vec_P.Vector is
+            Signals : Signal_Vec_P.Vector( Count_Type(Signal_Idx_T'Last) );
+            Depth_Count: Natural := 0;
+            Start_Idx, End_Idx: Positive := 1;
+         begin
+            for Str_Idx in Line'Range loop
+               if Line( Str_Idx ) = '[' then
+                  Depth_Count := Depth_Count + 1;
+               elsif Line( Str_Idx ) = ']' then
+                  Depth_Count := Depth_Count - 1;
+               elsif Line( Str_Idx ) = ',' then 
+                  End_Idx := Str_Idx - 1;
+               elsif Line( Str_Idx ) in '1' .. '9' then
+               end if;
+            end loop;
+            return Signals;
+         end Process_Signals_Line;
+         
          File: File_Type;
-         Signals : Signal_Vec_P.Vector(Count_Type(Signal_Idx_T'Last));
-         Line_Count: Positive := 1;
+         Signals : All_Signals_P.Vector(Count_Type(Signal_Idx_T'Last));
       begin
          Open( File, In_File, Input_File );
          
          while not End_Of_File( File ) loop
             declare
-               Line: String := Get_Line( File );
+               Left: constant String := Get_Line( File );
+               Right: constant String := Get_Line( FIle );
             begin
-               Put_Line( Line );
+               Append( Signals, (Left => Process_Signals_Line( Left ), 
+                                 Right => Process_Signals_Line( Right ) ) );
             end;
+            
+            -- Given there is a space seperating it, skip it if not the end of file
+            if not End_Of_File( File ) then
+               Skip_Line( FIle );
+            end if;
          end loop;
 
          Close(File);
          return Signals;
       end Get_Signal_List;
+      
+      Signals : All_Signals_P.Vector := Get_Signal_List( Input_File );
+      Correct_Signals : Natural := Count_Correct_Signals( Signals );
    begin
       Put_Line( "--- Day 13 ---" );
       Put_Line( "Part 1" );
+      Put_Line( "Count of correct signals: " & Correct_Signals'Image );
    end Run_Day_13;
 
 end Days;
