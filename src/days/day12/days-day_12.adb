@@ -1,5 +1,4 @@
 with Ada.Containers.Formal_Hashed_Maps;
-with Ada.Containers.Formal_Ordered_Sets;
 package body Days.Day_12 with SPARK_Mode is
    use Ada.Containers;
 
@@ -153,8 +152,12 @@ package body Days.Day_12 with SPARK_Mode is
       end loop;
       
       Dykstra( Start_Loc, Map, Queue, Visited );
-
-      return Element( Visited, End_Loc );
+      
+      if Contains( Visited, End_Loc) then
+         return Element( Visited, End_Loc );
+      else
+         return Steps_T'Last;
+      end if;
    end Minimum_Step_Path;
 
 end Days.Day_12;

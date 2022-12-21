@@ -569,7 +569,7 @@ package body Days is
       Start_Coord : constant Map_Coord_R := Get_Coord_Location( 'S', Map );
       End_Coord : constant Map_Coord_R := Get_Coord_Location( 'E', Map );
       Steps: Natural;
-      Hiking_Steps: Natural;
+      Hiking_Steps: Natural := Natural'Last;
    begin
       Put_Line( "--- Day 12 ---" );
       Put_Line( "Part 1" );
@@ -588,5 +588,19 @@ package body Days is
 
       Steps := Minimum_Step_Path( Start_Loc => Start_Coord, End_Loc => End_Coord, Map => Map );
       Put_Line( "Minimum steps to end: " & Steps'Image );
+      
+      -- Jank brute force search for path from a
+      for I in Map'Range(1) loop
+         for J in Map'Range(2) loop
+            if Map( I, J ) = 'a' then
+               Steps := Minimum_Step_Path( Start_Loc => (Row => I, Col => J), End_Loc => End_Coord, Map => Map );
+               if Steps < Hiking_Steps then
+                  Hiking_Steps := Steps;
+               end if;
+            end if;
+         end loop;
+      end loop;
+      
+      Put_Line( "Minimum hiking path steps: " & Hiking_Steps'Image );
    end Run_Day_12;
 end Days;
