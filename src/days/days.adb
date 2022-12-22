@@ -2,6 +2,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Fixed;
 with Ada.Containers.Vectors;
 with Ada.Strings;
+with Ada.Strings.Bounded;
 with Ada.Strings.Maps;
 with Ada.Strings.Maps.Constants;
 with Ada.Numerics.Big_Numbers.Big_Integers;
@@ -611,23 +612,56 @@ package body Days is
       use Signal_Vec_P;
       use Signals_P;
       use All_Signals_P;
+      use Ada.Strings.Bounded;
 
       function Get_Signal_List( Input_File: String ) return All_Signals_P.Vector is
          function Process_Signals_Line( Line: String ) return Signal_Vec_P.Vector is
+            package Num_Store_P is new Generic_Bounded_Length( 100 );
+            use Num_Store_P;
+            Num_Store : Num_Store_P.Bounded_String := To_Bounded_String("");
             Signals : Signal_Vec_P.Vector( Count_Type(Signal_Idx_T'Last) );
+            Signal : Signals_P.Vector( Count_Type(Signal_Idx_T'Last) );
+            Prev_Char : Character := ' ';
             Depth_Count: Natural := 0;
-            Start_Idx, End_Idx: Positive := 1;
          begin
             for Str_Idx in Line'Range loop
                if Line( Str_Idx ) = '[' then
+                  -- If we have entries in the signals, we add them at the current depth
+                  if not Is_Empty( Signal ) then
+                     Append( Signals, (Signals => Signal, Depth => Depth_Count) );
+                  end if;
+                  -- Every time we see a new entry clear the vector and increment depth
+                  -- If we hit multiple [, it will just work through them increasing the depth
+                  Clear(Signal);
                   Depth_Count := Depth_Count + 1;
                elsif Line( Str_Idx ) = ']' then
+                  if Num_Store /= "" then
+                     Put_Line( "Number stored: " & To_String( Num_Store ) & ", Depth: " & Depth_Count'Image );
+                     Append( Signal, Signal_Val_T'Value( To_String( Num_Store ) ));
+                     Num_Store := To_Bounded_String("");
+                  end if;
+                  -- If we arent going up a cascading chain of ], then add signal to vector
+                  if Prev_Char /= ']' then
+                     Append( Signals, (Signals => Signal, Depth => Depth_Count) );
+                  end if;
+                  Clear(Signal);
                   Depth_Count := Depth_Count - 1;
                elsif Line( Str_Idx ) = ',' then 
-                  End_Idx := Str_Idx - 1;
+                  -- If we see a comma and we have a number, add signal to the store and reset it
+                  -- Else just skip it as it is between list entries
+                  if Num_Store /= "" then
+                     Put_Line( "Number stored: " & To_String( Num_Store ) & ", Depth: " & Depth_Count'Image );
+                     Append( Signal, Signal_Val_T'Value( To_String( Num_Store ) ));
+                     Num_Store := To_Bounded_String("");
+                  end if;
                elsif Line( Str_Idx ) in '1' .. '9' then
+                  -- Every time we see a number, add it to the number store string
+                  Num_Store := Num_Store & Line( Str_Idx );
                end if;
+
+               Prev_Char := Line( Str_Idx );
             end loop;
+            Put_Line( "" );
             return Signals;
          end Process_Signals_Line;
          
@@ -661,6 +695,14 @@ package body Days is
       Put_Line( "--- Day 13 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Count of correct signals: " & Correct_Signals'Image );
+
+      for Signal of Signals loop
+         for L of Signal.Left loop
+            for SL of L.Signals loop
+                  Put_Line( "Signal :" & SL'Image );
+            end loop;
+         end loop;
+      end loop;
    end Run_Day_13;
 
 end Days;

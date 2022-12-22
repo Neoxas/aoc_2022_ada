@@ -4,9 +4,10 @@ package Days.Day_13 is
    use Ada.Containers;
    
    type Signal_Idx_T is range 1 .. 20;
+   type Signal_Val_T is range 1 .. 100;
    
    package Signals_P is new Formal_Vectors( Index_Type => Signal_Idx_T,
-                                         Element_Type => Natural );
+                                         Element_Type => Signal_Val_T );
    
    type Signal_List_R is record
       -- Vector for signal at this list entry
