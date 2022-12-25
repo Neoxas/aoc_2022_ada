@@ -732,7 +732,7 @@ package body Days is
             declare
                Line: constant String := Get_Line( File );
                Stone_Lines : constant Split_Str_Arr := Split_String( Line, "->" );
-               Entries : Stone_Line_P.Vector( 20 );
+               Entries : Stone_Line_P.Vector( 100 );
             begin
                for Stone_Str of Stone_Lines loop
                   declare
