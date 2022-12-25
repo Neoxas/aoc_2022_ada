@@ -21,6 +21,7 @@ with Days.Day_11;
 with Days.Day_12;
 with Days.Day_13;
 with Days.Day_14;
+with Days.Day_15;
 
 package body Days is
     
@@ -822,5 +823,11 @@ package body Days is
       Put_Line( "Part 2" );
       Put_Line( "Amount of Sand that fell to floor: " & Sand_Count'Image );
    end Run_Day_14;
-
+   
+   procedure Run_Day_15( Input_File: String ) is
+      use Days.Day_15;
+   begin
+      Put_Line( "--- Day 15 ---" );
+      Put_Line( "Part 1" );
+   end Run_Day_15;
 end Days;
