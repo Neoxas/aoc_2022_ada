@@ -53,16 +53,16 @@ package body Days.Day_13 is
                -- If the depths arent equal, then we want to check the length of one of the sides is 1
                if L.Depth /= R.Depth then
                   if Length(R.Signals) <= 1 then
-                     if L.Depth < R.Depth  then
+                     if R.Depth <= L.Depth  then
                         Result := Left_Vs_Right_Signal(L.Signals, R.Signals);
-                     else 
+                     else
                         Result := False;
                      end if;
                   
                   elsif  Length(L.Signals) <= 1 then
-                     if R.Depth < L.Depth  then
+                     if L.Depth <= R.Depth  then
                         Result := Left_Vs_Right_Signal(L.Signals, R.Signals);
-                     else 
+                     else
                         Result := False;
                      end if;
                   end if;
@@ -96,7 +96,6 @@ package body Days.Day_13 is
    begin
       for Signals_Idx in Signals loop
          if Signals_In_Correct_Order( Element(Signals, Signals_Idx).Left, Element(Signals, Signals_Idx).Right ) then
-            Put_Line( "Index : " & Signals_Idx'Image & " in correct order" );
             Idx_Sum := Idx_Sum + Signals_Idx;
          end if;
       end loop;
