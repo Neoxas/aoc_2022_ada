@@ -1,3 +1,4 @@
+with ADa.Text_IO; use Ada.Text_IO;
 package body Days.Day_13 is
    use Signal_Vec_P;
    use Signals_P;
@@ -53,6 +54,10 @@ package body Days.Day_13 is
             Result := False;
          end if;
          
+         -- If we hit a false, exit the loop
+         if not Result then
+            exit;
+         end if;
       end loop;
       -- Want to pop entry off list.
       -- Check they are correct depth
@@ -68,6 +73,7 @@ package body Days.Day_13 is
    begin
       for Signals_Idx in Signals loop
          if Signals_In_Correct_Order( Element(Signals, Signals_Idx).Left, Element(Signals, Signals_Idx).Right ) then
+            Put_Line( "Index : " & Signals_Idx'Image & " in correct order" );
             Idx_Sum := Idx_Sum + Natural(Signals_Idx);
          end if;
       end loop;
