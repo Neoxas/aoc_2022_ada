@@ -783,14 +783,44 @@ package body Days is
          end loop;
       end Print_Sand;
       
+      function Add_Floor_To_Grid( Grid: Sand_Arr_T ) return Sand_Arr_T is
+         GF : Sand_Arr_T := Grid;
+         Last_Stone : Sand_Row_Idx;
+         Found_Last_Stone: Boolean := False;
+      begin
+         for Row in reverse GF'Range( 1 ) loop
+            for Col in GF'Range( 2 ) loop
+               if GF( Row, Col ) = Rock then
+                  Last_Stone := Row + 2;
+                  Found_Last_Stone := True;
+                  exit;
+               end if;
+            end loop;
+            
+            if Found_Last_Stone then
+               exit;
+            end if;
+         end loop;
+         
+         for Col in GF'Range( 2 ) loop
+            GF( Last_Stone, Col ) := Rock;
+         end loop;
+         return GF;
+      end Add_Floor_To_Grid;
+
       Grid : Sand_Arr_T := Build_Sand_Grid( Input_File );
+      Grid_With_Floor : Sand_Arr_T := Add_Floor_To_Grid( Grid );
       Sand_Count : Natural;
    begin
       Put_Line( "--- Day 14 ---" );
       Count_Units_Coming_To_Rest( Grid, Sand_Count );
-      Print_Sand( Grid );
+      --Print_Sand( Grid_With_Floor );
       Put_Line( "Part 1" );
-      Put_Line( "Amount of Sand that fell: " & Sand_Count'Image );
+      Put_Line( "Amount of Sand that fell to void: " & Sand_Count'Image );
+      
+      Count_Units_Coming_To_Rest( Grid_With_Floor, Sand_Count );
+      Put_Line( "Part 2" );
+      Put_Line( "Amount of Sand that fell to floor: " & Sand_Count'Image );
    end Run_Day_14;
 
 end Days;
