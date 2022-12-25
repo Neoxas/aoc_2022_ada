@@ -96,6 +96,7 @@ package body Days.Day_13 is
    begin
       for Signals_Idx in Signals loop
          if Signals_In_Correct_Order( Element(Signals, Signals_Idx).Left, Element(Signals, Signals_Idx).Right ) then
+            Put_Line( "Signal : " & Signals_Idx'Image & " in correct order" );
             Idx_Sum := Idx_Sum + Signals_Idx;
          end if;
       end loop;
