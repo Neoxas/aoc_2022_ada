@@ -4,13 +4,15 @@ package body Days.Day_13 is
    use Signals_P;
    use All_Signals_P;
    
+   type Signal_State_E is ( True, False, Equal );
+   
    function Index_In_Vector( Index: Signal_Idx_T; Vec: Signal_Vec_P.Vector) return Boolean is
      ( Index in First_Index( Vec ) .. Last_Index( Vec ) );
    
    function Index_In_Vector( Index: Signal_Idx_T; Vec: Signals_P.Vector) return Boolean is
      ( Index in First_Index( Vec ) .. Last_Index( Vec ) );
    
-   function Left_Vs_Right_Signal( Left: Signals_P.Vector; Right: Signals_P.Vector ) return Boolean is
+   function Left_Vs_Right_Signal( Left: Signals_P.Vector; Right: Signals_P.Vector ) return Signal_State_E is
    begin      
       for Left_Idx in Left loop
          -- If the left index is in the right vector, keep going
@@ -30,34 +32,54 @@ package body Days.Day_13 is
       end loop;
       
       -- If every IDX is fine, we return true
-      return True;
+      return Equal;
    end Left_Vs_Right_Signal;
    
    function Signals_In_Correct_Order( Left: Signal_Vec_P.Vector; Right: Signal_Vec_P.Vector ) return Boolean is
-      Result: Boolean := True;
+      Result: Signal_State_E := Equal;
    begin
       for Signal_Idx in Right loop
          -- If we have an entry in the left hand side, compare them
          if Index_In_Vector( Signal_Idx, Left ) then
-            -- If the depths arent equal, then we want to check the length of one of the sides is 1
-            if Element( Left, Signal_Idx ).Depth /= Element(Right, Signal_Idx ).Depth and then (Length(Element(Right, Signal_Idx).Signals) = 1 or Length(Element(Left, Signal_Idx).Signals) = 1) then
-               Result := Left_Vs_Right_Signal(Element(Left, Signal_Idx).Signals, Element( Right, Signal_Idx ).Signals);
-            -- Else if they do existthe same we compare them
-            elsif Element(Left, Signal_Idx).Depth = Element(Right, Signal_Idx).Depth then
-               Result := Left_Vs_Right_Signal(Element(Left, Signal_Idx).Signals, Element( Right, Signal_Idx ).Signals);
-            -- Catch all failure case
+            declare 
+               L : constant Signal_List_R := Element( Left, Signal_Idx );
+               R : constant Signal_List_R := Element( Right, Signal_Idx );
+            begin
+               -- If the depths arent equal, then we want to check the length of one of the sides is 1
+               if L.Depth /= R.Depth then
+                  if Length(R.Signals) <= 1 then
+                     if L.Depth < R.Depth  then
+                        Result := Left_Vs_Right_Signal(L.Signals, R.Signals);
+                     else 
+                        Result := False;
+                     end if;
+                  
+                  elsif  Length(L.Signals) <= 1 then
+                     if R.Depth < L.Depth  then
+                        Result := Left_Vs_Right_Signal(L.Signals, R.Signals);
+                     else 
+                        Result := False;
+                     end if;
+                  end if;
+                  -- Else if they do existthe same we compare them
+               elsif L.Depth = R.Depth then
+                  Result := Left_Vs_Right_Signal(L.Signals, R.Signals);
+                  -- Catch all failure case
+               else
+                  Result := False;
+               end if;
+            end;
             else
-               Result := False;
+               -- Right hand side still has elements whilst left is empty, so pass and exit
+               Result := True;
             end if;
-         else
-            -- Right hand side still has elements whilst left is empty, so fails
-            Result := False;
-         end if;
          
          -- If we hit a false, exit the loop
-         if not Result then
-            exit;
-         end if;
+         case Result is
+            when True => return True;
+            when False => return False;
+            when Equal => null;
+         end case;
       end loop;
       -- Want to pop entry off list.
       -- Check they are correct depth
@@ -65,7 +87,7 @@ package body Days.Day_13 is
       -- If left > right => Fail
       -- If Right runs out before left => Fail
       -- else => Pass
-      return Result;
+      return True;
    end Signals_In_Correct_Order;
 
    function Count_Correct_Signals( Signals: All_Signals_P.Vector ) return Natural is
@@ -74,7 +96,7 @@ package body Days.Day_13 is
       for Signals_Idx in Signals loop
          if Signals_In_Correct_Order( Element(Signals, Signals_Idx).Left, Element(Signals, Signals_Idx).Right ) then
             Put_Line( "Index : " & Signals_Idx'Image & " in correct order" );
-            Idx_Sum := Idx_Sum + Natural(Signals_Idx);
+            Idx_Sum := Idx_Sum + Signals_Idx;
          end if;
       end loop;
          
