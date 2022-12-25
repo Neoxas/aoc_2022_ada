@@ -738,7 +738,7 @@ package body Days is
                   declare
 
                      Stone_Arr : constant Split_Str_Arr := Split_String( To_String(Stone_Str), "," );
-                     
+                     -- Remove anything that isnt a digit and convert them to row/col/
                      Row: constant Sand_Row_Idx := Sand_Row_Idx'Value( To_String( Trim( Source => Stone_Arr(1), 
                                                                                         Left => not Decimal_Digit_Set, 
                                                                                         Right => not Decimal_Digit_Set ) ) );
@@ -752,10 +752,12 @@ package body Days is
                end loop;
                
                for I in First_Index( Entries ) + 1 .. Last_Index( Entries ) loop
+                  -- Look back to see where we go from to end
                   declare
                      Prev_Entry : constant Stone_R := Element( Entries, I - 1 );
                      Curr_Entry : constant Stone_R := Element( Entries, I );
                   begin
+                     -- As the index can only be positive, go from the min to the max for row/col.
                      for R in Sand_Row_Idx'Min( Prev_Entry.Row, Curr_Entry.Row ) .. Sand_Row_Idx'Max( Prev_Entry.Row, Curr_Entry.Row ) loop
                         for C in Sand_Col_Idx'Min( Prev_Entry.Col, Curr_Entry.Col ) .. Sand_Col_Idx'Max( Prev_Entry.Col, Curr_Entry.Col ) loop
                            Sand_Arr( R, C ) := Rock;
@@ -782,10 +784,13 @@ package body Days is
       end Print_Sand;
       
       Grid : Sand_Arr_T := Build_Sand_Grid( Input_File );
+      Sand_Count : Natural;
    begin
       Put_Line( "--- Day 14 ---" );
-      Put_Line( "Part 1" );
+      Count_Units_Coming_To_Rest( Grid, Sand_Count );
       Print_Sand( Grid );
+      Put_Line( "Part 1" );
+      Put_Line( "Amount of Sand that fell: " & Sand_Count'Image );
    end Run_Day_14;
 
 end Days;
