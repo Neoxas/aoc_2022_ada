@@ -1,6 +1,6 @@
 package Days.Day_14 with SPARK_Mode is
    pragma Elaborate_Body;
-   subtype Sand_Col_Idx is Natural range 450 .. 550;
+   subtype Sand_Col_Idx is Natural range 250 .. 750;
    subtype Sand_Row_Idx is Natural range 0 .. 200;
    
    type Sand_Symbols_E is ( Air, Sand, Rock );
