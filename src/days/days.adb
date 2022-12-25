@@ -19,6 +19,7 @@ with Days.Day_10;
 with Days.Day_11;
 with Days.Day_12;
 with Days.Day_13;
+with Days.Day_14;
 
 package body Days is
     
@@ -698,5 +699,34 @@ package body Days is
       Put_Line( "Part 1" );
       Put_Line( "Count of correct signals: " & Correct_Signals'Image );
    end Run_Day_13;
+   
+   procedure Run_Day_14( Input_File: String ) is
+      use Day_14;
+      use Utilities;
+      
+      function Build_Sand_Grid( Input_File: String ) return Sand_Arr_T is
+         Sand_Arr : Sand_Arr_T := ( others => ( others => Air ) );
+      begin
+         return Sand_Arr;
+      end Build_Sand_Grid;
+
+      procedure Print_Sand( Grid: Sand_Arr_T ) is
+         Row_Str: String( Grid'First( 2 ) .. Grid'Last( 2 ) );
+      begin
+         for Row in Grid'Range( 1 ) loop
+            for Col in Grid'Range( 2 ) loop
+               Row_Str( Col ) := Sand_Lookup( Grid( Row, Col ) );
+            end loop;
+
+            Put_Line( Row_Str );
+         end loop;
+      end Print_Sand;
+      
+      Grid : Sand_Arr_T := Build_Sand_Grid( Input_File );
+   begin
+      Put_Line( "--- Day 14 ---" );
+      Put_Line( "Part 1" );
+      Print_Sand( Grid );
+   end Run_Day_14;
 
 end Days;
