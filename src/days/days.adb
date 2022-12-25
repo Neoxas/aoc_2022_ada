@@ -1,6 +1,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Fixed;
 with Ada.Containers.Vectors;
+with Ada.Containers.Formal_Vectors;
 with Ada.Strings;
 with Ada.Strings.Bounded;
 with Ada.Strings.Maps;
@@ -705,8 +706,66 @@ package body Days is
       use Utilities;
       
       function Build_Sand_Grid( Input_File: String ) return Sand_Arr_T is
+         use Ada.Containers;
+         use Split_Str_P;
+         use Ada.Strings.Maps;
+         use Ada.Strings.Maps.Constants;
+
+         type Stone_R is record
+            Row : Sand_Row_Idx;
+            Col : Sand_Col_Idx;
+         end record;
+         
+         package Stone_Line_P is new Formal_Vectors( Index_Type => Positive,
+                                                     Element_Type => Stone_R );
+         use Stone_Line_P;
+
          Sand_Arr : Sand_Arr_T := ( others => ( others => Air ) );
+         File : File_Type;
       begin
+         -- Get the line from the string. Split based on ->. Then we want to trim each one and split based on ,.
+         -- We can then append each entry to the array.
+         -- Once we have built the array, go through and put all the stone entries in.
+         Open( File, In_File, Input_File );
+         
+         while not End_Of_Line( File ) loop
+            declare
+               Line: constant String := Get_Line( File );
+               Stone_Lines : constant Split_Str_Arr := Split_String( Line, "->" );
+               Entries : Stone_Line_P.Vector( 20 );
+            begin
+               for Stone_Str of Stone_Lines loop
+                  declare
+
+                     Stone_Arr : constant Split_Str_Arr := Split_String( To_String(Stone_Str), "," );
+                     
+                     Row: constant Sand_Row_Idx := Sand_Row_Idx'Value( To_String( Trim( Source => Stone_Arr(1), 
+                                                                                        Left => not Decimal_Digit_Set, 
+                                                                                        Right => not Decimal_Digit_Set ) ) );
+                     
+                     Col: constant Sand_Col_Idx := Sand_Col_Idx'Value( To_String( Trim( Source => Stone_Arr(0), 
+                                                                                        Left => not Decimal_Digit_Set, 
+                                                                                        Right => not Decimal_Digit_Set ) ) );
+                  begin
+                     Append( Entries, ( Row => Row, Col => Col ) );
+                  end;
+               end loop;
+               
+               for I in First_Index( Entries ) + 1 .. Last_Index( Entries ) loop
+                  declare
+                     Prev_Entry : constant Stone_R := Element( Entries, I - 1 );
+                     Curr_Entry : constant Stone_R := Element( Entries, I );
+                  begin
+                     for R in Sand_Row_Idx'Min( Prev_Entry.Row, Curr_Entry.Row ) .. Sand_Row_Idx'Max( Prev_Entry.Row, Curr_Entry.Row ) loop
+                        for C in Sand_Col_Idx'Min( Prev_Entry.Col, Curr_Entry.Col ) .. Sand_Col_Idx'Max( Prev_Entry.Col, Curr_Entry.Col ) loop
+                           Sand_Arr( R, C ) := Rock;
+                        end loop;
+                     end loop;
+                  end;
+               end loop;
+            end;
+         End loop;
+         Close( File );
          return Sand_Arr;
       end Build_Sand_Grid;
 
