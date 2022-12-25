@@ -668,7 +668,7 @@ package body Days is
          end Process_Signals_Line;
          
          File: File_Type;
-         Signals : All_Signals_P.Vector(Count_Type(Signal_Idx_T'Last));
+         Signals : All_Signals_P.Vector(Count_Type(All_Signals_Idx_T'Last));
       begin
          Open( File, In_File, Input_File );
          
