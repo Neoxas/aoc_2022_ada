@@ -3,7 +3,7 @@ package Days.Day_13 is
    pragma Elaborate_Body;
    use Ada.Containers;
    
-   type Signal_Idx_T is range 1 .. 20;
+   subtype Signal_Idx_T is Positive range 1 .. 20;
    type Signal_Val_T is range 1 .. 100;
    
    package Signals_P is new Formal_Vectors( Index_Type => Signal_Idx_T,

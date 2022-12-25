@@ -616,8 +616,10 @@ package body Days is
 
       function Get_Signal_List( Input_File: String ) return All_Signals_P.Vector is
          function Process_Signals_Line( Line: String ) return Signal_Vec_P.Vector is
+
             package Num_Store_P is new Generic_Bounded_Length( 100 );
             use Num_Store_P;
+
             Num_Store : Num_Store_P.Bounded_String := To_Bounded_String("");
             Signals : Signal_Vec_P.Vector( Count_Type(Signal_Idx_T'Last) );
             Signal : Signals_P.Vector( Count_Type(Signal_Idx_T'Last) );
@@ -634,9 +636,9 @@ package body Days is
                   -- If we hit multiple [, it will just work through them increasing the depth
                   Clear(Signal);
                   Depth_Count := Depth_Count + 1;
+
                elsif Line( Str_Idx ) = ']' then
                   if Num_Store /= "" then
-                     Put_Line( "Number stored: " & To_String( Num_Store ) & ", Depth: " & Depth_Count'Image );
                      Append( Signal, Signal_Val_T'Value( To_String( Num_Store ) ));
                      Num_Store := To_Bounded_String("");
                   end if;
@@ -646,11 +648,11 @@ package body Days is
                   end if;
                   Clear(Signal);
                   Depth_Count := Depth_Count - 1;
+
                elsif Line( Str_Idx ) = ',' then 
                   -- If we see a comma and we have a number, add signal to the store and reset it
                   -- Else just skip it as it is between list entries
                   if Num_Store /= "" then
-                     Put_Line( "Number stored: " & To_String( Num_Store ) & ", Depth: " & Depth_Count'Image );
                      Append( Signal, Signal_Val_T'Value( To_String( Num_Store ) ));
                      Num_Store := To_Bounded_String("");
                   end if;
@@ -661,7 +663,7 @@ package body Days is
 
                Prev_Char := Line( Str_Idx );
             end loop;
-            Put_Line( "" );
+
             return Signals;
          end Process_Signals_Line;
          
@@ -689,20 +691,12 @@ package body Days is
          return Signals;
       end Get_Signal_List;
       
-      Signals : All_Signals_P.Vector := Get_Signal_List( Input_File );
-      Correct_Signals : Natural := Count_Correct_Signals( Signals );
+      Signals : constant All_Signals_P.Vector := Get_Signal_List( Input_File );
+      Correct_Signals : constant Natural := Count_Correct_Signals( Signals );
    begin
       Put_Line( "--- Day 13 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Count of correct signals: " & Correct_Signals'Image );
-
-      for Signal of Signals loop
-         for L of Signal.Left loop
-            for SL of L.Signals loop
-                  Put_Line( "Signal :" & SL'Image );
-            end loop;
-         end loop;
-      end loop;
    end Run_Day_13;
 
 end Days;
