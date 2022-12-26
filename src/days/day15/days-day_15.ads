@@ -1,5 +1,5 @@
 with Ada.Containers.Formal_Vectors;
-package Days.Day_15 is
+package Days.Day_15 with SPARK_Mode is
    use Ada.Containers;
    
    type Beacon_Grid_E is ( Empty, Beacon, Signal, Blocked );
@@ -10,8 +10,8 @@ package Days.Day_15 is
                                                           Signal => 'S', 
                                                           Blocked => '#' );
    
-   subtype Beacon_Row_Idx is Integer range -20 .. 100;
-   subtype Beacon_Col_Idx is Integer range -150 .. 150;
+   subtype Beacon_Row_Idx is Integer range -1_000_000 .. 3_000_000;
+   subtype Beacon_Col_Idx is Integer range -1_000_000 .. 1_000_000;
    
    type Point_R is record 
       Row : Beacon_Row_Idx;
@@ -26,9 +26,9 @@ package Days.Day_15 is
    package Scan_Results_P is new Formal_Vectors( Index_Type => Positive,
                                                  Element_Type => Scan_R );
    
-   type Beacon_Arr_T is array( Beacon_Row_Idx, Beacon_Col_Idx ) of Beacon_Grid_E;
+   type Beacon_Arr_T is array( Beacon_Col_Idx ) of Beacon_Grid_E;
    
-   procedure Add_Beacons_To_Grid( Scan_Entries: Scan_Results_P.Vector; Grid: in out Beacon_Arr_T );
+   procedure Add_Beacons_To_Grid( Scan_Entries: Scan_Results_P.Vector; Grid: in out Beacon_Arr_T; Row_To_Check: Beacon_Row_Idx );
 
-   function Count_Not_Empty_Entries_In_Row( Grid: Beacon_Arr_T; Row: Beacon_Row_Idx ) return Natural;
+   function Count_Not_Empty_Entries_In_Row( Grid: Beacon_Arr_T ) return Natural;
 end Days.Day_15;
