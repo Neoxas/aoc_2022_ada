@@ -815,7 +815,7 @@ package body Days is
    begin
       Put_Line( "--- Day 14 ---" );
       Count_Units_Coming_To_Rest( Grid, Sand_Count );
-      --Print_Sand( Grid_With_Floor );
+      Print_Sand( Grid );
       Put_Line( "Part 1" );
       Put_Line( "Amount of Sand that fell to void: " & Sand_Count'Image );
       
@@ -826,6 +826,7 @@ package body Days is
    
    procedure Run_Day_15( Input_File: String ) is
       use Days.Day_15;
+
    begin
       Put_Line( "--- Day 15 ---" );
       Put_Line( "Part 1" );
