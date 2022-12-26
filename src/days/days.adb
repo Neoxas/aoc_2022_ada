@@ -836,17 +836,18 @@ package body Days is
             Integer_Set : constant Character_Set := Decimal_Digit_Set or To_Set('-');
             
             Strings : constant Split_Str_Arr := Split_String( Line, " " );
-            Sensor_Col_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 2 ), not Integer_Set, not Integer_Set);
-            Sensor_Row_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 3 ), not Integer_Set, not Integer_Set);
-            Beacon_Col_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 8 ), not Integer_Set, not Integer_Set);
-            Beacon_Row_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 9 ), not Integer_Set, not Integer_Set);
+            Sensor_Col_Str : constant String := To_String( Trim( Strings( 2 ), not Integer_Set, not Integer_Set));
+            Sensor_Row_Str : constant String := To_String( Trim( Strings( 3 ), not Integer_Set, not Integer_Set));
+            Beacon_Col_Str : constant String := To_String( Trim( Strings( 8 ), not Integer_Set, not Integer_Set));
+            Beacon_Row_Str : constant String := To_String( Trim( Strings( 9 ), not Integer_Set, not Integer_Set));
          begin
+            Put_Line( Sensor_Col_Str & " " & Sensor_Row_Str & " " & Beacon_Col_Str & " " & Beacon_Row_Str ); 
             return ( Beacon => 
-                       ( Col => Beacon_Col_Idx'Value( To_String( Beacon_Col_Str )),
-                         Row => Beacon_Row_Idx'Value( To_String( Beacon_Row_Str )) ),
+                       ( Col => Beacon_Col_Idx'Value( Beacon_Col_Str ),
+                         Row => Beacon_Row_Idx'Value( Beacon_Row_Str ) ),
                      Signal =>
-                       ( Col => Beacon_Col_Idx'Value( To_String( Sensor_Col_Str ) ),
-                         Row => Beacon_Row_Idx'Value( To_String( Sensor_Row_Str ) ) ) );
+                       ( Col => Beacon_Col_Idx'Value( Sensor_Col_Str ),
+                         Row => Beacon_Row_Idx'Value( Sensor_Row_Str ) ) );
          end Process_Line;
 
          Scan_Results : Scan_Results_P.Vector( 200 );
@@ -872,14 +873,15 @@ package body Days is
       end Print_Beacon;
       
       Entries : constant Scan_Results_P.Vector := Process_Signals( Input_File );
-      Grid : Beacon_Arr_T := ( others => Empty );
+      Grid_A : Beacon_Arr_A;
       Count : Natural := 0;
       Row : constant Beacon_Row_Idx := 2_000_000;
       --Row : constant Beacon_Row_Idx := 10;
    begin
-      
-      Add_Beacons_To_Grid( Entries, Grid, Row );
-      Count := Count_Not_Empty_Entries_In_Row( Grid );
+      Grid_A := new Beacon_Arr_T;
+      Grid_A.all := (others => Empty );
+      Add_Beacons_To_Grid( Entries, Grid_A, Row );
+      Count := Count_Not_Empty_Entries_In_Row( Grid_A );
       -- Print_Beacon( Grid );
       Put_Line( "--- Day 15 ---" );
       Put_Line( "Part 1" );
