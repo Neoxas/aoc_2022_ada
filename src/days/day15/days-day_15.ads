@@ -10,8 +10,8 @@ package Days.Day_15 is
                                                           Signal => 'S', 
                                                           Blocked => '#' );
    
-   subtype Beacon_Row_Idx is Integer range 0 .. 200;
-   subtype Beacon_Col_Idx is Integer range -20 .. 200;
+   subtype Beacon_Row_Idx is Integer range -20 .. 200;
+   subtype Beacon_Col_Idx is Integer range -200 .. 200;
    
    type Point_R is record 
       Row : Beacon_Row_Idx;
@@ -30,5 +30,5 @@ package Days.Day_15 is
    
    procedure Add_Beacons_To_Grid( Scan_Entries: Scan_Results_P.Vector; Grid: in out Beacon_Arr_T );
 
-   function Count_Entries_In_Row( Grid: Beacon_Arr_T; Row: Beacon_Row_Idx ) return Natural;
+   function Count_Not_Empty_Entries_In_Row( Grid: Beacon_Arr_T; Row: Beacon_Row_Idx ) return Natural;
 end Days.Day_15;

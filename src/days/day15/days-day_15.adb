@@ -56,16 +56,16 @@ package body Days.Day_15 is
       end loop;
    end Add_Beacons_To_Grid;
 
-   function Count_Entries_In_Row( Grid: Beacon_Arr_T; Row: Beacon_Row_Idx ) return Natural is
+   function Count_Not_Empty_Entries_In_Row( Grid: Beacon_Arr_T; Row: Beacon_Row_Idx ) return Natural is
       Count : Natural := 0;
    begin
       for Col in Grid'Range( 2 ) loop
-         if Grid( Row, Col ) = Empty then
+         if Grid( Row, Col ) /= Empty then
             Count := Count + 1;
          end if;
       end loop;
       
       return Count;
-   end Count_Entries_In_Row;
+   end Count_Not_Empty_Entries_In_Row;
 
 end Days.Day_15;

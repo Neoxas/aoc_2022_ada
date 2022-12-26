@@ -826,9 +826,53 @@ package body Days is
    
    procedure Run_Day_15( Input_File: String ) is
       use Days.Day_15;
+      use Scan_Results_P;
+      function Process_Signals( Input_File: String ) return Scan_Results_P.Vector is
+         function Process_Line( Line: String ) return Scan_R is
+            use Utilities;
+            use Split_Str_P;
+            use Ada.Strings.Maps;
+            use Ada.Strings.Maps.Constants;
+            Integer_Set : constant Character_Set := Decimal_Digit_Set or To_Set('-');
+            
+            Strings : constant Split_Str_Arr := Split_String( Line, " " );
+            Sensor_Col_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 2 ), not Integer_Set, not Integer_Set);
+            Sensor_Row_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 3 ), not Integer_Set, not Integer_Set);
+            Beacon_Col_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 8 ), not Integer_Set, not Integer_Set);
+            Beacon_Row_Str : constant Split_Str_P.Bounded_String := Trim( Strings( 9 ), not Integer_Set, not Integer_Set);
+         begin
+            return ( Beacon => 
+                       ( Col => Beacon_Col_Idx'Value( To_String( Beacon_Col_Str )),
+                         Row => Beacon_Row_Idx'Value( To_String( Beacon_Row_Str )) ),
+                     Signal =>
+                       ( Col => Beacon_Col_Idx'Value( To_String( Sensor_Col_Str ) ),
+                         Row => Beacon_Row_Idx'Value( To_String( Sensor_Row_Str ) ) ) );
+         end Process_Line;
 
+         Scan_Results : Scan_Results_P.Vector( 200 );
+         File: File_Type;
+      begin
+         Open( File, In_File, Input_File );
+         
+         while not End_Of_File( File ) loop
+            Append( Scan_Results, Process_Line( Get_Line( File ) ) );
+         end loop;
+
+         Close(File);
+         
+         return Scan_Results;
+      end Process_Signals;
+      
+      Entries : constant Scan_Results_P.Vector := Process_Signals( Input_File );
+      Grid : Beacon_Arr_T := ( others => ( others => Empty ) );
+      Count : Natural := 0;
+      Row : constant Beacon_Row_Idx := 10;
    begin
+      
+      Add_Beacons_To_Grid( Entries, Grid );
+      Count := Count_Not_Empty_Entries_In_Row( Grid, Row );
       Put_Line( "--- Day 15 ---" );
       Put_Line( "Part 1" );
+      Put_Line( "Count of blocked spaces in row " & Row'Image & ": " & Count'Image );
    end Run_Day_15;
 end Days;
