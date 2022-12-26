@@ -863,6 +863,16 @@ package body Days is
          return Scan_Results;
       end Process_Signals;
       
+      procedure Print_Beacon( Grid: Beacon_Arr_T ) is
+      begin
+         for I in Grid'Range( 1 ) loop
+            for J in Grid'Range( 2 ) loop
+               Put( BEACON_GRID_LOOKUP( Grid( I, J ) ) );
+            end loop;
+            Put_Line( "" );
+         end loop;
+      end Print_Beacon;
+      
       Entries : constant Scan_Results_P.Vector := Process_Signals( Input_File );
       Grid : Beacon_Arr_T := ( others => ( others => Empty ) );
       Count : Natural := 0;
@@ -871,6 +881,7 @@ package body Days is
       
       Add_Beacons_To_Grid( Entries, Grid );
       Count := Count_Not_Empty_Entries_In_Row( Grid, Row );
+      Print_Beacon( Grid );
       Put_Line( "--- Day 15 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Count of blocked spaces in row " & Row'Image & ": " & Count'Image );

@@ -10,8 +10,8 @@ package Days.Day_15 is
                                                           Signal => 'S', 
                                                           Blocked => '#' );
    
-   subtype Beacon_Row_Idx is Integer range -20 .. 200;
-   subtype Beacon_Col_Idx is Integer range -200 .. 200;
+   subtype Beacon_Row_Idx is Integer range -20 .. 100;
+   subtype Beacon_Col_Idx is Integer range -150 .. 150;
    
    type Point_R is record 
       Row : Beacon_Row_Idx;

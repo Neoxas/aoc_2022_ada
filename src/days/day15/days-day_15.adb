@@ -38,7 +38,7 @@ package body Days.Day_15 is
             R : constant Beacon_Row_Idx := Sig.Row + I;
          begin
             -- Go in to either way from max col to single in increasing I increments
-            for C in Sig.Col + Manhat_Dist - I .. Sig.Col + Manhat_Dist + I loop
+            for C in Sig.Col - Manhat_Dist + I .. Sig.Col + Manhat_Dist - I loop
                -- If its not empty, we block it out
                if Grid( R, C ) = Empty then
                   Grid( R, C ) := Blocked;
@@ -60,7 +60,7 @@ package body Days.Day_15 is
       Count : Natural := 0;
    begin
       for Col in Grid'Range( 2 ) loop
-         if Grid( Row, Col ) /= Empty then
+         if Grid( Row, Col ) = Blocked then
             Count := Count + 1;
          end if;
       end loop;
