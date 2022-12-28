@@ -841,7 +841,6 @@ package body Days is
             Beacon_Col_Str : constant String := To_String( Trim( Strings( 8 ), not Integer_Set, not Integer_Set));
             Beacon_Row_Str : constant String := To_String( Trim( Strings( 9 ), not Integer_Set, not Integer_Set));
          begin
-            Put_Line( Sensor_Col_Str & " " & Sensor_Row_Str & " " & Beacon_Col_Str & " " & Beacon_Row_Str ); 
             return ( Beacon => 
                        ( Col => Beacon_Col_Idx'Value( Beacon_Col_Str ),
                          Row => Beacon_Row_Idx'Value( Beacon_Row_Str ) ),
@@ -863,15 +862,7 @@ package body Days is
          
          return Scan_Results;
       end Process_Signals;
-      
-      procedure Print_Beacon( Grid: Beacon_Arr_T ) is
-      begin
-         for I in Grid'Range loop
-               Put( BEACON_GRID_LOOKUP( Grid( I ) ) );
-            Put_Line( "" );
-         end loop;
-      end Print_Beacon;
-      
+          
       Entries : constant Scan_Results_P.Vector := Process_Signals( Input_File );
       Grid_A : Beacon_Arr_A;
       Count : Natural := 0;
@@ -882,7 +873,6 @@ package body Days is
       Grid_A.all := (others => Empty );
       Add_Beacons_To_Grid( Entries, Grid_A, Row );
       Count := Count_Not_Empty_Entries_In_Row( Grid_A );
-      -- Print_Beacon( Grid );
       Put_Line( "--- Day 15 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Count of blocked spaces in row " & Row'Image & ": " & Count'Image );
