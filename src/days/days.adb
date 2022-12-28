@@ -868,6 +868,7 @@ package body Days is
       Count : Natural := 0;
       Row : constant Beacon_Row_Idx := 2_000_000;
       --Row : constant Beacon_Row_Idx := 10;
+      Beacon : constant Point_R := Find_Empty_Point( Entries );
    begin
       Grid_A := new Beacon_Arr_T;
       Grid_A.all := (others => Empty );
@@ -876,5 +877,7 @@ package body Days is
       Put_Line( "--- Day 15 ---" );
       Put_Line( "Part 1" );
       Put_Line( "Count of blocked spaces in row " & Row'Image & ": " & Count'Image );
+      Put_Line( "Part 2" );
+      Put_Line( "Beacon index: " & Beacon'Image );
    end Run_Day_15;
 end Days;
