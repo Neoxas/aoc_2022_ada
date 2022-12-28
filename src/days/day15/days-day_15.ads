@@ -13,9 +13,6 @@ package Days.Day_15 with SPARK_Mode is
    subtype Beacon_Row_Idx is Integer range -50_000_000 .. 50_000_000;
    subtype Beacon_Col_Idx is Integer range -50_000_000 .. 50_000_000;
    
-   subtype Restricted_Col_Idx is Integer range 0 .. 4_000_000;
-   subtype Restricted_Row_Idx is Integer range 0 .. 4_000_000;
-   
    type Point_R is record 
       Row : Beacon_Row_Idx;
       Col : Beacon_Col_Idx;
@@ -29,10 +26,10 @@ package Days.Day_15 with SPARK_Mode is
    package Scan_Results_P is new Formal_Vectors( Index_Type => Positive,
                                                  Element_Type => Scan_R );
    
-   type Beacon_Arr_T is array( Restricted_Row_Idx, Restricted_Col_Idx ) of Beacon_Grid_E;
+   type Beacon_Arr_T is array( Beacon_Col_Idx ) of Beacon_Grid_E;
    type Beacon_Arr_A is access Beacon_Arr_T;
    
-   procedure Add_Beacons_To_Grid( Scan_Entries: Scan_Results_P.Vector; Grid: Beacon_Arr_A );
+   procedure Add_Beacons_To_Grid( Scan_Entries: Scan_Results_P.Vector; Grid: Beacon_Arr_A; Row_To_Check: Beacon_Row_Idx );
 
-   function Count_Not_Empty_Entries_In_Row( Grid: Beacon_Arr_A; Row_To_Check: Beacon_Row_Idx ) return Natural;
+   function Count_Not_Empty_Entries_In_Row( Grid: Beacon_Arr_A ) return Natural;
 end Days.Day_15;

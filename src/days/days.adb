@@ -866,10 +866,8 @@ package body Days is
       
       procedure Print_Beacon( Grid: Beacon_Arr_T ) is
       begin
-         for I in Grid'Range( 1 ) loop
-            for J in Grid'Range( 2 ) loop
-               Put( BEACON_GRID_LOOKUP( Grid( I, J ) ) );
-            end loop;
+         for I in Grid'Range loop
+               Put( BEACON_GRID_LOOKUP( Grid( I ) ) );
             Put_Line( "" );
          end loop;
       end Print_Beacon;
@@ -881,9 +879,9 @@ package body Days is
       --Row : constant Beacon_Row_Idx := 10;
    begin
       Grid_A := new Beacon_Arr_T;
-      Grid_A.all := ( others => (others => Empty ) );
-      Add_Beacons_To_Grid( Entries, Grid_A );
-      Count := Count_Not_Empty_Entries_In_Row( Grid_A, Row );
+      Grid_A.all := (others => Empty );
+      Add_Beacons_To_Grid( Entries, Grid_A, Row );
+      Count := Count_Not_Empty_Entries_In_Row( Grid_A );
       -- Print_Beacon( Grid );
       Put_Line( "--- Day 15 ---" );
       Put_Line( "Part 1" );
