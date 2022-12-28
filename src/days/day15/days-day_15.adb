@@ -1,3 +1,4 @@
+with Ada.Text_IO; use Ada.Text_IO;
 package body Days.Day_15 with SPARK_Mode is
 
    type Blocked_Row_R is record
@@ -141,19 +142,20 @@ package body Days.Day_15 with SPARK_Mode is
                Blocked: constant Blocked_Row_R := Get_Blocked_Row_For_Scan( Element( Scan_Entries, Idx ), Row );
             begin
                if Col not in Blocked.Start_Col .. Blocked.End_Col then
-                  return True;
+                  return False;
                end if;
             end;
          end if;
       end loop;
       
-      return False;
+      return True;
    end Point_In_Blocked_Zone;
    
    function Find_Empty_Point( Scan_Entries: Scan_Results_P.Vector ) return Point_R is
    begin
       for I in Restricted_Row_Idx'Range loop
          for J in Restricted_Col_Idx'Range loop
+            Put_Line( "Row : " & I'Image & "/" & Restricted_Row_Idx'Last'Image & ", Col: " & J'Image & "/" & Restricted_Col_Idx'Last'Image );
             if not Point_In_Blocked_Zone( Scan_Entries, I, J ) then
                return ( Row => I, Col => J );
             end if;
